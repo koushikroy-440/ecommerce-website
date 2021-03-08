@@ -4,8 +4,8 @@
         <h5 class="my-3">CREATE CATEGORY
         <i class="fa fa-circle-o-notch close fa-spin d-none create_category_loader" aria-hidden="true" style="font-size:18px"></i>
         </h5>
-        <form class="create-category-form>
-            <input type="text" class="input form-control mb-3" placeholder="Mobile" style="border:none;background-color:#f9f9f;" required="required">
+        <form class="create-category-form">
+
             <input type="text" class="input form-control mb-3" placeholder="Mobile" style="border:none;background-color:#f9f9f;" required="required">
             <div class="add-field-area mb-3"></div>
             <button type="button" class="btn btn-primary mb-3 add-field-btn">

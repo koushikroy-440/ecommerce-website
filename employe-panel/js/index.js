@@ -51,6 +51,11 @@ function dynamic_request(request_link) {
         success: function(response){
         
             $(".page").html(response);
+            console.log(request_link);
+            if(request_link == "create_category_design.php")
+            {
+                category_list();
+            }
             $(".add-field-btn").click(function(){
                 
                  var placeholder = $(".input:first").attr("placeholder");
@@ -85,33 +90,121 @@ function dynamic_request(request_link) {
                     },
                     success : function(response)
                     {
-                        $(".create_category_loader").addClass("d-noe");
-                        if(response.trim() == "done")
-                        {
-                            category_list();
-                            var notice  = document.createElement("DIV");
-                            notice.className = "alert alert-success";
-                            notice.innerHTML = "<b>success !</b>";
-                            $(".create_category_notice").html(notice);
-                            setTimeout(function(){
+                            $(".create_category_loader").addClass("d-noe");
+                            if(response.trim() == "done")
+                            {
+                                category_list();
+                                var notice  = document.createElement("DIV");
+                                notice.className = "alert alert-success";
+                                notice.innerHTML = "<b>success !</b>";
+                                $(".create_category_notice").html(notice);
+                                setTimeout(function(){
+                                    $(".create_category_notice").html("");
+                                    $(".create-category-form").trigger('reset');
+                                },3000);
+                            }
+                            else{
+                                var notice  = document.createElement("DIV");
+                                notice.className = "alert alert-success";
+                                notice.innerHTML = "<b>"+response+"</b>";
+                                $(".create_category_notice").html(notice);
+                                setTimeout(function(){
                                 $(".create_category_notice").html("");
-                                $(".create-category-form").trigger('reset');
-                            },3000);
-                        }
-                        else{
-                            var notice  = document.createElement("DIV");
-                            notice.className = "alert alert-success";
-                            notice.innerHTML = "<b>"+response+"</b>";
-                            $(".create_category_notice").html(notice);
-                            setTimeout(function(){
-                                $(".create_category_notice").html("");
-                                $(".create-category-form").trigger('reset');
-                            },3000);
-                        }
+                                    $(".create-category-form").trigger('reset');
+                                },3000);
+                            }
+                       
                     }
+
                 });
+            
 
             });
+                        // add brand field
+                $(".add-brand-btn").click(function(){
+                                                
+                    var placeholder = $(".brand-input:first").attr("placeholder");
+                    var input = document.createElement("INPUT");
+                    input.type = "text";
+                    input.className = "form-control brand-input mb-3";
+                    input.placeholder = placeholder;
+                    input.required = "required";
+                    input.style.background = "#f9f9f9";
+                    input.style.border = "none";
+                    $(".brand-field-area").append(input);
+                    
+            
+                });
+                //create BRANDS
+                $(".create-brand-btn").click(function (e) {
+                    e.preventDefault();
+                    
+                    var category = $(".brand-category").val();
+                    if(category == "Choose category")
+                    {
+                        var notice  = document.createElement("DIV");
+                                    notice.className = "alert alert-success";
+                                    notice.innerHTML = "<b>please choose a category</b>";
+                                    $(".create-brand-notice").html(notice);
+                                    setTimeout(function(){
+                                        $(".create-brand-notice").html("");
+                                        $(".brand-form").trigger('reset');
+                                    },1000);
+                    }
+                    else{
+                    var input = [];
+                    var input_length = $(".brand-input").length;
+                    
+                    var i;
+                    for(i=0;i<input_length;i++)
+                    {
+                        input[i] = document.getElementsByClassName("brand-input")[i].value;
+                    }
+                    var object = JSON.stringify(input);
+                   
+                    $.ajax({
+                        type : "POST",
+                        url : "php/create_brand.php",
+                        data : {
+                            json_data : object,
+                            category : category
+                        },
+                        beforeSend : function ()
+                        {
+                            $(".brand-loader").removeClass("d-none");
+                        },
+                        success : function(response)
+                        {
+                                $(".brand-loader").addClass("d-none");
+                                if(response.trim() == "done")
+                                {
+                                   
+                                    var notice  = document.createElement("DIV");
+                                    notice.className = "alert alert-success";
+                                    notice.innerHTML = "<b>success !</b>";
+                                    $(".create-brand-notice").html(notice);
+                                    setTimeout(function(){
+                                        $(".create-brand-notice").html("");
+                                        $(".brand-form").trigger('reset');
+                                    },3000);
+                                }
+                                else{
+                                    var notice  = document.createElement("DIV");
+                                    notice.className = "alert alert-success";
+                                    notice.innerHTML = "<b>"+response+"</b>";
+                                    $(".create-brand-notice").html(notice);
+                                    setTimeout(function(){
+                                    $(".create-brand-notice").html("");
+                                        $(".brand-form").trigger('reset');
+                                    },10000);
+                                }
+                           
+                        }
+    
+                    });
+                }
+    
+                });
         }
 
     });
@@ -221,8 +314,12 @@ function dynamic_request(request_link) {
                    }
                });
            }
+          
        }
-       
+                            
     }
    });
 }
+
+
+
