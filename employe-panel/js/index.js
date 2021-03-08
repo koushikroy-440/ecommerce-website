@@ -51,7 +51,7 @@ function dynamic_request(request_link) {
         success: function(response){
         
             $(".page").html(response);
-            console.log(request_link);
+            //console.log(request_link);
             if(request_link == "create_category_design.php")
             {
                 category_list();
@@ -120,7 +120,7 @@ function dynamic_request(request_link) {
             
 
             });
-                        // add brand field
+                        // ================= add brand field ====================
                 $(".add-brand-btn").click(function(){
                                                 
                     var placeholder = $(".brand-input:first").attr("placeholder");
@@ -135,14 +135,14 @@ function dynamic_request(request_link) {
                     
             
                 });
-                //create BRANDS
+                //===================== CREATE BRANDS ==============================
                 $(".create-brand-btn").click(function (e) {
                     e.preventDefault();
                     
                     var category = $(".brand-category").val();
                     if(category == "Choose category")
                     {
-                        var notice  = document.createElement("DIV");
+                                    var notice  = document.createElement("DIV");
                                     notice.className = "alert alert-success";
                                     notice.innerHTML = "<b>please choose a category</b>";
                                     $(".create-brand-notice").html(notice);
@@ -151,66 +151,105 @@ function dynamic_request(request_link) {
                                         $(".brand-form").trigger('reset');
                                     },1000);
                     }
-                    else{
-                    var input = [];
-                    var input_length = $(".brand-input").length;
-                    
-                    var i;
-                    for(i=0;i<input_length;i++)
-                    {
-                        input[i] = document.getElementsByClassName("brand-input")[i].value;
-                    }
-                    var object = JSON.stringify(input);
-                   
-                    $.ajax({
-                        type : "POST",
-                        url : "php/create_brand.php",
-                        data : {
-                            json_data : object,
-                            category : category
-                        },
-                        beforeSend : function ()
-                        {
-                            $(".brand-loader").removeClass("d-none");
-                        },
-                        success : function(response)
-                        {
-                                $(".brand-loader").addClass("d-none");
-                                if(response.trim() == "done")
+                    else {
+                            var input = [];
+                            var input_length = $(".brand-input").length;
+                            
+                            var i;
+                            for(i=0;i<input_length;i++)
+                            {
+                                input[i] = document.getElementsByClassName("brand-input")[i].value;
+                            }
+                            var object = JSON.stringify(input);
+                        
+                            $.ajax({
+                                type : "POST",
+                                url : "php/create_brand.php",
+                                data : {
+                                    json_data : object,
+                                    category : category
+                                },
+                                beforeSend : function ()
                                 {
-                                   
-                                    var notice  = document.createElement("DIV");
-                                    notice.className = "alert alert-success";
-                                    notice.innerHTML = "<b>success !</b>";
-                                    $(".create-brand-notice").html(notice);
-                                    setTimeout(function(){
-                                        $(".create-brand-notice").html("");
-                                        $(".brand-form").trigger('reset');
-                                    },3000);
+                                    $(".brand-loader").removeClass("d-none");
+                                },
+                                success : function(response)
+                                {
+                                        $(".brand-loader").addClass("d-none");
+                                        if(response.trim() == "done")
+                                        {
+                                        
+                                            var notice  = document.createElement("DIV");
+                                            notice.className = "alert alert-success";
+                                            notice.innerHTML = "<b>success !</b>";
+                                            $(".create-brand-notice").html(notice);
+                                            setTimeout(function(){
+                                                $(".create-brand-notice").html("");
+                                                $(".brand-form").trigger('reset');
+                                            },3000);
+                                        }
+                                        else{
+                                            var notice  = document.createElement("DIV");
+                                            notice.className = "alert alert-success";
+                                            notice.innerHTML = "<b>"+response+"</b>";
+                                            $(".create-brand-notice").html(notice);
+                                            setTimeout(function(){
+                                            $(".create-brand-notice").html("");
+                                                $(".brand-form").trigger('reset');
+                                            },10000);
+                                        }
+                                
                                 }
-                                else{
-                                    var notice  = document.createElement("DIV");
-                                    notice.className = "alert alert-success";
-                                    notice.innerHTML = "<b>"+response+"</b>";
-                                    $(".create-brand-notice").html(notice);
-                                    setTimeout(function(){
-                                    $(".create-brand-notice").html("");
-                                        $(".brand-form").trigger('reset');
-                                    },10000);
-                                }
-                           
+            
+                            });
                         }
     
                     });
+
+//======================== display brand =================
+                        $(document).ready(function(){
+                            $(".display-brand").on("change",function(){
+                                var selected_cat_name = $(this).val();
+                                $.ajax({
+                                    type: "POST",
+                                    url: "php/display_brands.php",
+                                    data: {
+                                        category_name : selected_cat_name
+                                    },
+                                    beforeSend: function(){
+                                        $(".brand-display-loader").removeClass("d-none");
+                                    },
+                                    success: function(response){
+                                        alert(response);
+                                        // $(".brand-display-loader").addClass("d-none");
+                                        // var table = document.createElement("table");
+                                        // table.style.width = "100%";
+                                        // table.style.border = "1px solid black";
+                                        // var json_data = JSON.parse(response);
+                                        // var i;
+                                        // for(i=0; i<json_data.length; i++)
+                                        // {
+                                        //     var tr = document.createElement("TR");
+                                        //     var td_category_name = document.createElement("TD");
+                                        //     var td_brands = document.createElement("TD");
+                                        //     td_category_name.innerHTML = json_data[i].category_name;
+                                        //    td_brands.innerHTML = json_data[i].brands;
+                                        //     table.append(tr);
+                                        //     tr.append(td_category_name);
+                                        //     tr.append(td_brands);
+                                        //     $(".brand-list-area").html(table);
+                                        // }
+                                    }
+                                });
+                            });
+                        });
                 }
-    
-                });
-        }
 
     });
 }
 
-//category list request
+//===================== category list request ========================
+
  $(document).ready(function(){
     category_list();
  });
@@ -291,7 +330,7 @@ function dynamic_request(request_link) {
                    });
                });
            }
-           //delete category 
+ //====================== delete category =============================
            delete_btn.onclick = function(){
                var parent = this.parentElement;
                var id = parent.getElementsByClassName("id")[0].innerHTML.trim();
