@@ -210,6 +210,7 @@ function dynamic_request(request_link) {
                         $(document).ready(function(){
                             $(".display-brand").on("change",function(){
                                 var selected_cat_name = $(this).val();
+                                var all_options = $(this).html().replace("<option>Choose category</option>").replace("<option>"+selected_cat_name+"</option>");
                                 $.ajax({
                                     type: "POST",
                                     url: "php/display_brands.php",
@@ -220,25 +221,146 @@ function dynamic_request(request_link) {
                                         $(".brand-display-loader").removeClass("d-none");
                                     },
                                     success: function(response){
-                                        alert(response);
-                                        // $(".brand-display-loader").addClass("d-none");
-                                        // var table = document.createElement("table");
-                                        // table.style.width = "100%";
-                                        // table.style.border = "1px solid black";
-                                        // var json_data = JSON.parse(response);
-                                        // var i;
-                                        // for(i=0; i<json_data.length; i++)
-                                        // {
-                                        //     var tr = document.createElement("TR");
-                                        //     var td_category_name = document.createElement("TD");
-                                        //     var td_brands = document.createElement("TD");
-                                        //     td_category_name.innerHTML = json_data[i].category_name;
-                                        //    td_brands.innerHTML = json_data[i].brands;
-                                        //     table.append(tr);
-                                        //     tr.append(td_category_name);
-                                        //     tr.append(td_brands);
-                                        //     $(".brand-list-area").html(table);
-                                        // }
+                                        if(response.trim() != "<b>No brands has been created in this category</b>")
+                                        {
+                                            var table = document.createElement("table");
+                                            table.style.width = "100%";
+                                            //table.style.border = "1px solid black";
+                                            table.border = "1";
+
+                                            table.className = "text-center";
+                                            var top_tr  = document.createElement("tr");
+                                            var th_cat = document.createElement("th");
+                                            th_cat.innerHTML = "category";
+                                            th_cat.style.height = "40px";
+                                            th_cat.className = "bg-danger text-light";
+                                            var th_brands = document.createElement("th");
+                                            th_brands.innerHTML = "Brands";
+                                            th_brands.style.height = "40px";
+                                            th_brands.className = "bg-danger text-light";
+                                            var th_edit = document.createElement("th");
+                                            th_edit.innerHTML = "edit";
+                                            th_edit.style.height = "40px";
+                                            th_edit.className = "bg-danger text-light";
+                                            var th_delete = document.createElement("th");
+                                            th_delete.innerHTML = "delete";
+                                            th_delete.style.height = "40px";
+                                            th_delete.className = "bg-danger text-light";
+                                            top_tr.append(th_cat);
+                                            top_tr.append(th_brands);
+                                            top_tr.append(th_edit);
+                                            top_tr.append(th_delete);
+                                            table.append(top_tr);
+
+
+
+
+
+                                            $(".brand-display-loader").addClass("d-none");
+                                            var json_data = JSON.parse(response);
+                                            var i;
+                                            for(i=0; i<json_data.length; i++)
+                                            {
+                                                var tr = document.createElement("TR");
+                                                var td_category_name = document.createElement("TD");
+                                                var td_brands = document.createElement("TD");
+
+                                                td_category_name.innerHTML = "<select class='border p-2 my-1 dynamic-c-name' disabled = 'disabled' ><option>"+json_data[i].category_name+"</option>"+all_options+"</select>";
+                                               td_brands.innerHTML = json_data[i].brands;
+
+                                               var td_edit = document.createElement("td");
+                                               td_edit.innerHTML = "<i class='fa fa-edit brand-edit mx-2' c-name = '"+json_data[i].category_name+"' b-name = '"+json_data[i].brands+"'></i><i class='fa fa-save brand-save d-none' c-name = '"+json_data[i].category_name+"' b-name = '"+json_data[i].brands+"'></i>";
+
+                                               var td_delete = document.createElement("td");
+                                               td_delete.innerHTML = "<i class='fa fa-trash brand-delete' c-name = '"+json_data[i].category_name+"' b-name = '"+json_data[i].brands+"'></i>";
+                                                table.append(tr);
+                                                tr.append(td_category_name);
+                                                tr.append(td_brands);
+                                                tr.append(td_edit);
+                                                tr.append(td_delete);
+                                                $(".brand-list-area").html(table);
+
+                        //===================== delete brands =============================
+                                                $(".brand-delete").each(function(){
+                                                    $(this).click(function(){
+                                                        var delete_icon = this;
+                                                        var c_name = $(this).attr("c-name");
+                                                        var b_name = $(this).attr("b-name");
+                                                        $.ajax({
+                                                            type : "POST",
+                                                            url : "php/delete_brands.php",
+                                                            data : {
+                                                                c_name : c_name,
+                                                                b_name : b_name
+                                                            },
+                                                            success : function(response)
+                                                            {
+                                                                if(response.trim() == "<b>Delete Success</b>")
+                                                                {
+                                                                    var row = delete_icon.parentElement.parentElement;
+                                                                    row.remove();
+                                                                }
+                                                            }
+                                                        });
+                                                    });
+                                                });
+                        //==================== Brand Edit ==========================================
+                                                $(".brand-edit").each(function(){
+                                                    $(this).click(function(){
+                                                        $(this).addClass("d-none");
+                                                        var edit_icon = $(this);
+                                                        var c_name = $(this).attr("c-name");
+                                                        var b_name = $(this).attr("b-name");
+                                                        var row = this.parentElement.parentElement;
+                                                        var td = row.getElementsByTagName("TD");
+                                                        var select_tag = td[0].getElementsByClassName("dynamic-c-name")[0];
+                                                        select_tag.disabled = false;
+                                                        td[1].contentEditable = true;
+                                                        td[1].focus();
+                                                        var delete_icon = td[3].getElementsByClassName("brand-delete")[0];
+                                                        var save_icon = td[2].getElementsByClassName("brand-save")[0];
+                                                        $(save_icon).removeClass("d-none");
+
+                                                        save_icon.onclick = function() {
+                                                            $.ajax({
+                                                                type: "POST",
+                                                                url : "php/edit_brand.php",
+                                                                data : {
+                                                                    previous_c_name : c_name,
+                                                                    previous_b_name : b_name,
+                                                                    c_name : select_tag.value,
+                                                                    b_name : td[1].innerHTML
+
+                                                                },
+                                                                success : function(response)
+                                                                {
+                                                                    if(response.trim() == "update success")
+                                                                    {
+                                                                        $(save_icon).addClass("d-none");
+                                                                        $($edit_icon).removeClass("d-none");
+                                                                        td[1].contentEditable = false;
+                                                                        select_tag.disabled = true;
+                                                                        $(edit_icon).attr("c-name",select_tag.val);
+                                                                        $(edit_icon).attr("b-name",td[1].innerHTML);
+
+                                                                        $(save_icon).attr("c-name",select_tag.val);
+                                                                        $(save_icon).attr("b-name",td[1].innerHTML);
+
+                                                                        $(delete_icon).attr("c-name",select_tag.val);
+                                                                        $(delete_icon).attr("b-name",td[1].innerHTML);
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                            
+                                                    });
+                                                });
+                                            }
+                                        }
+                                        else{
+                                            $(".brand-list-area").html(response);
+                                        }
+                                        
                                     }
                                 });
                             });
