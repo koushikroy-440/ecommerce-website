@@ -373,11 +373,12 @@ function dynamic_request(request_link) {
 //===================== category list request ========================
 
  $(document).ready(function(){
-    category_list();
+  //  category_list();
  });
 
 
  function category_list(){
+    $(".category-area").html("");
     $.ajax({
     type : "POST",
     url : "php/category.php",

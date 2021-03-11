@@ -11,10 +11,16 @@
             $store_data = "INSERT INTO category(category_name) VALUES('$json_data[$i]')";
             if($db->query($store_data))
             {
-               $message ="done"; 
+                
+              if(mkdir("../../stocks/".$json_data[$i]))
+              {
+                $message ="done";
+              }
             }
             else{
-                $message = "error not inserted";
+
+                $message = "Failed to store data in table";
+                
             }
         }
         echo $message;
