@@ -51,7 +51,7 @@ function dynamic_request(request_link) {
         success: function(response){
         
             $(".page").html(response);
-            //console.log(request_link);
+            console.log(request_link);
             if(request_link == "create_category_design.php")
             {
                 category_list();
