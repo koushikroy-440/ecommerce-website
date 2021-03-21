@@ -12,7 +12,7 @@ if ($response) {
             VALUES('$category','$json_data[$i]');
             ";
         if ($db->query($store_data)) {
-            if (mkdir("../../stocks" . $category . "/" . $json_data[$i])) {
+            if (mkdir("../../stocks/" . $category . "/" . $json_data[$i])) {
                 $message = "done";
             }
         } else {
@@ -34,7 +34,7 @@ if ($response) {
             VALUES('$category','$json_data[$i]');
             ";
             if ($db->query($store_data)) {
-                if (mkdir("../../stocks" . $category . "/" . $json_data[$i])) {
+                if (mkdir("../../stocks/" . $category . "/" . $json_data[$i])) {
                     $message = "done";
                 }
             } else {
