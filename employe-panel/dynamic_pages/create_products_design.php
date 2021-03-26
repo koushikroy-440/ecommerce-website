@@ -1,8 +1,9 @@
 <?php
+require_once "../../common-files/php/database.php";
 echo '<div class="row slideInDown">
 		<div class="col-md-12 py-2 bg-white rounded-lg shadow-sm">
 			<h5 class="my-3">CREATE PRODUCTS</h5>
-			<form action="dynamic_pages/d.php" method="post" enctype="multipart/form-data>
+			<form class="create-product-form" action="dynamic_pages/d.php" method="post" enctype="multipart/form-data>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -14,9 +15,17 @@ echo '<div class="row slideInDown">
 					
 					</div>
 					<div class="col-md-3 mb-3">
-						<select class="form-control" name="brands" placeholder="choose brands" required="required">
+						<select class="form-control brands-name" name="brands" placeholder="choose brands" required="required">
 							<option>Choose brands</option>';
-							
+							$get_data = "SELECT brands FROM brands";
+							$response = $db->query($get_data);
+							if($response)
+							{
+								while($data = $response->fetch_assoc())
+								{
+									echo "<option>" .$data['brands']. "</option>";
+								}
+							}
 						echo '</select>
 					</div>
 					<div class="col-md-12">
@@ -33,10 +42,42 @@ echo '<div class="row slideInDown">
 						<label for="product-quantity">Product Quantity</label>
 						<input class="form-control mb-3" name="quantity" placeholder="20" required="required" id="product-quantity"></input>
 					</div>
+					
 					<div class="row">
+					<div class="col-md-12 d-flex justify-content-around mb-4">
+
+						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
+							<label for="thumb">THUMB</label>
+							<input type="file" accept="image/*" id="thumb" name="thumb" style="width:100%;height:100%;">
+						</div>
+						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
+							<label for="front">FRONT</label>
+							<input type="file" accept="image/*" id="front" name="front" style="width:100%;height:100%;">
+						</div>
+						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
+							<label for="top">TOP</label>
+							<input type="file" accept="image/*" id="top" name="top" style="width:100%;height:100%;">
+						</div>
+						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
+							<label for="bottom">BOTTOM</label>
+							<input type="file" accept="image/*" id="bottom" name="bottom" style="width:100%;height:100%;">
+						</div>						
+						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
+							<label for="left">LEFT</label>
+							<input type="file" accept="image/*" id="left" name="left" style="width:100%;height:100%;">
+						</div>
+						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
+							<label for="right">RIGHT</label>
+							<input type="file" accept="image/*" id="right" name="right" style="width:100%;height:100%;">
+						</div>
+					</div
+					</div>
+					
+				</div>
+				<div class="row">
 						<div class="col-md-9 mt-3">
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+							<div class="progress create-products-progress d-none">
+								<div class="progress-bar">25%</div>
 					  		</div>
 						</div>
 						<div class="col-md-1"></div>
@@ -44,8 +85,7 @@ echo '<div class="row slideInDown">
 							<button type="submit" name="submit-btn" class="btn btn-lg btn-outline-primary">SUBMIT</button>
 						</div>
 					</div>
-				</div>
-				
+
 		
 			</form>
 				
