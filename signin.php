@@ -17,6 +17,38 @@
       <?php
              include_once("asset/nav.php");
       ?>
+      <div class="container p-5 bg-white shadow-lg border" style="margin-top:30px;">
+      <h2>LOGIN WITH US</h2>
+      <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <form class="signup-form">
+              
+
+              
+
+              <div class="form-group">
+                <label for="email">Email<sup class="text-danger">*</sup></label>
+                <input type="text" class="form-control bg-light" placeholder="a@gmail.com" id="email">
+              </div>
+
+              
+
+              <div class="form-group">
+                <label for="password">password<sup class="text-danger">*</sup></label>
+                <input type="password" class="form-control bg-light" placeholder="*******" id="password">
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary shadow-sm py-2">Register now</button>
+                
+              </div>
+              <p>Don't have any account <a href="signup.php">create now</a></p>
+            </form>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+      </div>
       <?php
         include_once("asset/footer.php");
 

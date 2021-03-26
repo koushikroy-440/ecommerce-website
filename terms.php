@@ -17,6 +17,11 @@
       <?php
              include_once("asset/nav.php");
       ?>
+      <div class="container p-5 bg-white shadow-lg border" style="margin-top:30px;">
+      <h2>TERMS AND CONDITIONS</h2>
+      <hr>
+        <?php echo $branding_data['terms_conditions']  ?>
+      </div>
       <?php
         include_once("asset/footer.php");
 
