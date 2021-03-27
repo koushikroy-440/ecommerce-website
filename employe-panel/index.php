@@ -19,189 +19,311 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-     <script type="text/javascript" src="js/index.js"></script>
+     <script type="text/javascript" src="js/indexf.js"></script>
   </head>
   <body>
       <div class="container-fluid">
         <div class="sidebar">
-        <button class="btn w-100 text-left" style="font-size:20px">
+        <button class="btn w-100 text-left collapse-item active" access-link="branding_design.php" style="font-size:20px">
         <i class="fa fa-image"></i>
         Branding details
         </button>
+
+        <button class="btn w-100 text-left homepage-design-btn" style="font-size:20px">
+        <i class="fa fa-home"></i>
+          homepage design
+          <i class="fa fa-angle-down close mt-2"></i>
+        </button>
+
+        <ul class="collapse homepage-design-collapse">
+            <li class="border-left p-2 collapse-item" access-link="header_showcase_design.php">Header Showcase</li>
+            <li class="border-left p-2 collapse-item" access-link="category_showcase_design.php">Category Showcase</li>
+       
+        </ul>
 
         <button class="btn w-100 text-left stock-update-btn" style="font-size:20px">
         <i class="fa fa-shopping-cart"></i>
         Stock update
         <i class="fa fa-angle-down close mt-2"></i>
         </button>
-        <ul class="collapse show stock-update-btn-menu">
-            <li class="border-left p-2 collapse-item active" access-link="create_category_design.php">Create category</li>
+        <ul class="collapse stock-update-btn-menu">
+            <li class="border-left p-2 collapse-item" access-link="create_category_design.php">Create category</li>
             <li class="border-left p-2 collapse-item" access-link="create_brands_design.php">Create brand</li>
             <li class="border-left p-2 collapse-item" access-link="create_products_design.php">Create products</li>
         </ul>
         </div>
         <div class="page">
             <div class="row">
-              <div class="col-md-2"></div>
-              <div class="col-md-8 bg-white rounded">
-                <form class="form-horizontal branding-form p-4">
+              <div class="col-md-4 p-4 bg-white rounded-lg shadow-sm">
+                <form class="header showcase-form">
                   <div class="form-group">
-                    <label for="brand-name"><b>Enter brand name</b> <i class="fa fa-edit brand_edit" style="cursor:pointer"> Edit Brand details</i></label>
-                    <input type="text" class="form-control brand-name" name="brand-name" id="brand-name">
+                    <label for="title-image">Title image<span> 200kb (1920*978)</span></label>
+                    <input type="file" accept="image/*" class="form-control" name="title-image" id="title-image" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="title-text">Title text <span class="title-limit">0</span><span>/40</span></label>
+                    <textarea class="form-control" rows="1" id="title-text" name="title-text" maxlength="40" required="required"></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="brand-logo"><b>upload brand logo</b></label>
-                    <input type="file" class="form-control brand-logo" name="brand-logo" id="brand-logo">
+                    <label for="subtitle-text">subtitle text <span class="subtitle-limit">0</span><span>/100</span></label>
+                    <textarea class="form-control" rows="5" id="subtitle-text" name="subtitle-text" maxlength="100"  required="required"></textarea>
                   </div>
-                
                   <div class="form-group">
-                    <label for="domain-name"><b>enter domain name</b></label>
-                    <input type="text" class="form-control domain-name" name="domain-name" id="domain-name">
+                    <button class="btn btn-primary py-2" type="submit">Add showcase</button>
                   </div>
-
-                  <div class="form-group">
-                    <label for="brand-email"><b>email</b></label>
-                    <input type="text" class="form-control brand-email" name="brand-email" id="brand-email">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="social-handles"><b>social handles</b></label>
-                    <input type="text" class="form-control facebook" name="facebook" id="facebook">
-                    <br>
-                    <input type="text" class="form-control instagram" name="instagram" id="instagram">
-
-                  </div>
-
-                  <div class="form-group">
-                    <label for="address"><b>address</b></label>
-                    <textarea name="address" id="address" class="form-control address" maxlength="200" name="address" cols="10" rows="5"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                    <label for="phone"><b>phone</b></label>
-                    <input type="text" class="form-control phone" name="phone" id="phone">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="about-us"><b>about us </b><small class="about-us-count"> 0</small><small>/5000</small></label>
-                    <textarea name="about-us" id="about-us" class="form-control about-us" name="about-us" cols="10" rows="8" maxlength="5000"></textarea>
-                    </div>
-
-                  <div class="form-group">
-                    <label for="privacy-policy"><b>privacy-policy </b><small class="privacy-policy-count"> 0</small><small>/5000</small></label>
-                    <textarea name="privacy-policy" id="privacy-policy" maxlength="5000" class="form-control privacy-policy" name="privacy-policy" cols="10" rows="8"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                    <label for="terms-conditions"><b>terms and conditions </b><small class="terms-conditions-count"> 0</small><small>/5000</small></label>
-                    <textarea name="terms-conditions" id="terms-conditions" class="form-control terms-conditions" name="terms-conditions" cols="10" rows="8" maxlength="5000"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                    <label for="cookies"><b>cookies terms and conditions </b><small class="cookies-count"> 0</small><small>/5000</small></label>
-                    <textarea name="cookies" id="cookies" class="form-control cookies" cols="10" rows="8" name="cookies" maxlength="5000"></textarea>
-                    </div>
-                    
-                    <button class="btn btn-primary" type="submit">update</button>
+                 
                 </form>
-
-                
               </div>
-              <div class="col-md-2"></div>
-            </div>
+              <div class="col-md-1"></div>
+              <div class="col-md-7 p-4 bg-white rounded-lg shadow-sm position-relative showcase-preview d-flex">
+              <div class="title-box">  
+              <h1 class="showcase-title target">TITLE</h1>
+                <h4 class="showcase-subtitle target">SUBTITLE</h4>
+                  </div>
+                <div class="showcase-formating d-flex justify-content-around align-items-center">
+                  <div class="btn-group">
+                      <button class="btn btn-light">color</button>
+                      <button class="btn btn-light">
+                      <input type="color" class="color-selector" name="color-selector">
+                      </button>
+                  </div>
 
+                  <div class="btn-group">
+                      <button class="btn btn-light">Font size</button>
+                      <button class="btn btn-light">
+                      <input type="range" min="100" max="500"class="font-size" name="font-size">
+                      </button>
+                  </div>
+
+                 
+                      <button class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+                      <span>Alignment</span>
+
+                        <div class="dropdown-menu">
+                          <span class="dropdown-item alignment" align-position="h" align-value="flex-start">LEFT</span>
+                          <span class="dropdown-item alignment" align-position="h" align-value="flex-end">RIGHT</span>
+                          <span class="dropdown-item alignment" align-position="h" align-value="center">CENTER</span>
+                          <span class="dropdown-item alignment" align-position="v" align-value="flex-start">TOP</span>
+                          <span class="dropdown-item alignment" align-position="v" align-value="center">V-CENTER</span>
+                          <span class="dropdown-item alignment" align-position="v" align-value="flex-end">BOTTOM</span>
+                        </div>
+                      </button>
+                      
+
+                </div>
+              </div>
+            
+            </div>
         </div>
       </div>
-    // count length
-    <script type="text/javascript">
-    $(document).ready(function(){
-
-      $("#about-us").on("input", function(){
-        var length = $(this).val().length;
-        $(".about-us-count").html(length);
-      });
-
-      $("#privacy-policy").on("input", function(){
-        var length = $(this).val().length;
-        $(".privacy-policy-count").html(length);
-      });
-
-      $("#terms-conditions").on("input", function(){
-        var length = $(this).val().length;
-        $(".terms-conditions-count").html(length);
-      });
-
-      $("#cookies").on("input", function(){
-        var length = $(this).val().length;
-        $(".cookies-count").html(length);
-      });
-
-      //branding details
-      $(document).ready(function(){
-        $(".branding-form").on("submit",function(e){
-          e.preventDefault();
-          var file = document.getElementById("brand-logo");
-          var file_size;
-          if(file.value == "")
-          {
-            file_size = 0;
-          }
-          else{
-            file_size = file.files[0].size;
-          }
-          if(file_size<200000)
-          {
-          $.ajax({
-            type: "POST",
-            url: "php/branding.php",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            catch : false,
-            success: function(response){
-              alert(response);
-            }
+      <script>
+        $(document).ready(function(){
+          $(".target").each(function(){
+            $(this).click(function(event){
+              var element = event.target;
+              var index_number = $(element).index();
+              sessionStorage.setItem('index_number',index_number);
+              var i;
+              for (i = 0; i <$(".target").length; i++) {
+                $(".target").css({
+                  border : "",
+                  width : "",
+                boxShadow : "",
+                padding : ""
+                });
+              }
+              $(this).css({
+                border : "2px solid red",
+                width : "fit-Content",
+                boxShadow : "0px 0px 3px grey",
+                padding : "2px"
+              });
           });
-        }
-        else{
-          alert("please upload less than 200kb file");
-        }
+
+          $(this).on('dblclick',function(){
+            
+            var i;
+              for (i = 0; i <$(".target").length; i++) {
+                $(".target").css({
+                  border : "",
+                  width : "",
+                boxShadow : "",
+                padding : ""
+                });
+              }
+          });
+          
+          
+
+          });
+         
+          $(".color-selector").on("change",function(){
+                  var color = this.value;
+                  var in_number = Number(sessionStorage.getItem('index_number'));
+                  var element = document.getElementsByClassName("target")[in_number];
+                  element.style.color = color;
+              });
+
+              $(".font-size").on("input",function(){
+                  var size = this.value;
+                  var in_number = Number(sessionStorage.getItem('index_number'));
+                  var element = document.getElementsByClassName("target")[in_number];
+                  element.style.fontSize = size+"%";
+                  
+              });
         });
-      });
 
-      //branding details control
+        //title image upload
+        $(document).ready(function(){
+           $("#title-image").on("change",function(){
+             var file = this.files[0];
+             if(file.size < 200000)
+             {
+                var url = URL.createObjectURL(file);
+                var image = new Image();
+                image.src = url;
+                image.onload = function(){
+                  var o_width = image.width;
+                  var o_height = image.height;
+                  if(o_width < 1920 && o_height < 978)
+                  {
+                    image.style.width = "100%";
+                    $(".showcase-preview").append(image);
+                  }
+                  else{
+                    alert("please choose another files");
+                  }
+                }
+             }
+             else{
+               alert("please upload less than 200kb file");
+             }
+           })
+        });
+        //textarea maxlength
+        $(document).ready(function(){
+          $("#title-text").on("input", function(){
+            var length = this.value.length;
+            $(".showcase-title").html(this.value);
+            $(".title-limit").html(length);
 
-      $(document).ready(function(){
-        $.ajax({
-          type: "POST",
-          url: "php/check_branding_table.php",
-          success: function(response){
-            var all_data = JSON.parse(response.trim());
-            $("#brand-name").val(all_data[0].brand_name);
-            $("#domain-name").val(all_data[0].domain_name);
-            $("#brand-email").val(all_data[0].brand_email);
-            $("#facebook").val(all_data[0].facebook);
-            $("#instagram").val(all_data[0].instagram);
-            $("#address").val(all_data[0].address);
-            $("#phone").val(all_data[0].phone);
-            $("#about-us").val(all_data[0].about_us);
-            $("#privacy-policy").val(all_data[0].privacy_policy);
-            $("#terms-conditions").val(all_data[0].terms_conditions);
-            $("#cookies").val(all_data[0].cookies);
-            $(".branding-from input,.branding-from textarea,.branding-form button").prop("disabled",true);
-            $(".brand_edit").click(function(){
-              $(".branding-from input,.branding-from textarea,.branding-form button").prop("disabled",false);
-              $("#brand-logo").removeAttr("required");
+          });
+
+          $("#subtitle-text").on("input", function(){
+            var length = this.value.length;
+            $(".showcase-subtitle").html(this.value);
+            $(".subtitle-limit").html(length);
+
+          });
+
+          //add Showcase
+          $(".showcase-form").submit(function(e){
+            e.preventDefault();
+            var title = document.querySelector(".showcase-title");
+            var subtitle = document.querySelector(".showcase-subtitle");
+            var file = document.querySelector("#title-image").files[0];
+            var title_size = "";
+            var title_color = "";
+            if(title.style.fontSize == "")
+            {
+              title_size = "300%";
+            }
+            else{
+              title_size = title.style.fontSize;
+            }
+
+            if(title.style.color == "")
+            {
+              title_color = "black";
+            }
+            else{
+              title_color = title.style.color;
+            }
+            var subtitle_size = "";
+            var subtitle_color = "";
+            if(subtitle.style.fontSize == "")
+            {
+              subtitle_size = "300%";
+            }
+            else{
+              subtitle_size = subtitle.style.fontSize;
+            }
+
+            if(subtitle.style.color == "")
+            {
+              subtitle_color = "black";
+            }
+            else{
+              subtitle_color = subtitle.style.color;
+            }
+
+            var flex_box = document.querySelector(".showcase-preview");
+            var h_align = "";
+            var v_align = "";
+            if(flex_box.style.justifyContent == ""){
+              h_align = "flex-start";
+            }
+            else{
+              h_align = flex_box.style.justifyContent;
+            }
+
+            if(flex_box.style.alignItems == ""){
+              v_align = "flex-start";
+            }
+            else{
+              v_align = flex_box.style.alignItems;
+            }
+            var css_data = {
+              title_size : title_size,
+              title_color : title_color,
+              subtitle_size : subtitle_size,
+              subtitle_color : subtitle_color,
+              h_align : h_align,
+              v_align : v_align,
+              title_text :title.innerHTML,
+              subtitle_text :subtitle.innerHTML
+            };
+            var formdata = new FormData();
+            formdata.append("file_data",file);
+            formdata.append("css_data",JSON.stringify(css_data));
+
+            console.log(css_data);
+            $.ajax({
+              type: "POST",
+              url : "php/header_showcase.php",
+              data : formdata,
+              contentType : false,
+              processData: false,
+              catch : false,
+              success: function(response){
+                  alert(response);
+              }
             });
-          }
+          });
         });
-      });
-
-
-
-    });
-    </script>
+        //alignment 
+        $(document).ready(function(){
+          $(".alignment").each(function(){
+            $(this).click(function(){
+              var align_position = $(this).attr("align-position");
+              var align_value = $(this).attr("align-value");
+              //alert(align_position);
+              if(align_position == "h")
+              {
+                $(".showcase-preview").css({
+                  justifyContent: align_value,
+                });
+              }
+              else if(align_position == "v"){
+                alignItems = align_value;
+              
+               }
+               
+            });
+          });
+        });
+      </script>
 
   </body>
 </html>

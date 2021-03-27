@@ -47,3 +47,23 @@ ul{
     background-color: aqua;
     
 }
+
+
+
+
+.showcase-formating{   
+     position:absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: black;
+}
+.title-box{
+    position : absolute;
+    z-index: 2;
+}
+
+.showcase-subtitle{
+    margin-top:55px;
+}
