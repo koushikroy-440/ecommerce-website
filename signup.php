@@ -1,5 +1,5 @@
 <?php
-    require_once "common-files/databases/database.php";
+require_once "common-files/databases/database.php";
 ?>
 <!doctype html>
 <html lang="en">
@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body class="bg-light">
-      
+
       <?php
-             include_once("asset/nav.php");
-      ?>
+include_once "asset/nav.php";
+?>
       <div class="container p-5 bg-white shadow-lg border" style="margin-top:30px;">
       <h2>CREATE AN ACCOUNT</h2>
       <hr>
@@ -50,7 +50,7 @@
 
               <div class="form-group">
                 <button type="submit" class="btn btn-primary shadow-sm py-2">Register now</button>
-               
+
               </div>
 
             </form>
@@ -59,9 +59,9 @@
         </div>
       </div>
       <?php
-        include_once("asset/footer.php");
+include_once "asset/footer.php";
 
-      ?>
+?>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -56,7 +56,7 @@ function dynamic_request(request_link) {
         success: function (response) {
 
             $(".page").html(response);
-            if(request_link == "branding_design.php") {
+            if (request_link == "branding_design.php") {
                 branding_info();
             }
             //====================create product =================
@@ -70,28 +70,27 @@ function dynamic_request(request_link) {
                         processData: false,
                         contentType: false,
                         cache: false,
-                        xhr: function (){
+                        xhr: function () {
                             var request = new XMLHttpRequest();
-                            request.upload.onprogress = function (){
-                               var percentage = Math.floor((e.loaded*100)/e.total);
-                               $(".progress-bar").css({
-                                   width: percentage+"%",
-                               });
-                               $(".progress-bar").html(percentage+"%");
+                            request.upload.onprogress = function () {
+                                var percentage = Math.floor((e.loaded * 100) / e.total);
+                                $(".progress-bar").css({
+                                    width: percentage + "%",
+                                });
+                                $(".progress-bar").html(percentage + "%");
                             }
                             return request;
                         },
-                        beforeSend: function (){
+                        beforeSend: function () {
                             $(".create-products-progress").removeClass("d-none");
                         },
                         success: function (response) {
-                            if(response == "success")
-                            {
+                            if (response == "success") {
                                 $(".create-products-progress").addClass("d-none");
-                                $(".progress-bar").css({width: '0'});
+                                $(".progress-bar").css({ width: '0' });
                                 $(".create-product-form").trigger('reset');
                             }
-                            else{
+                            else {
                                 alert(response);
                             }
                         }
@@ -516,89 +515,87 @@ function category_list() {
 }
 // branding information
 
-function branding_info(){
-$(document).ready(function(){
-  $("#about-us").on("input", function(){
-var length = $(this).val().length;
-$(".about-us-count").html(length);
-});
+function branding_info() {
+    $(document).ready(function () {
+        $("#about-us").on("input", function () {
+            var length = $(this).val().length;
+            $(".about-us-count").html(length);
+        });
 
-$("#privacy-policy").on("input", function(){
-var length = $(this).val().length;
-$(".privacy-policy-count").html(length);
-});
+        $("#privacy-policy").on("input", function () {
+            var length = $(this).val().length;
+            $(".privacy-policy-count").html(length);
+        });
 
-$("#terms-conditions").on("input", function(){
-var length = $(this).val().length;
-$(".terms-conditions-count").html(length);
-});
+        $("#terms-conditions").on("input", function () {
+            var length = $(this).val().length;
+            $(".terms-conditions-count").html(length);
+        });
 
-$("#cookies").on("input", function(){
-var length = $(this).val().length;
-$(".cookies-count").html(length);
-});
+        $("#cookies").on("input", function () {
+            var length = $(this).val().length;
+            $(".cookies-count").html(length);
+        });
 
-//branding details
-$(document).ready(function(){
-$(".branding-form").on("submit",function(e){
-  e.preventDefault();
-  var file = document.getElementById("brand-logo");
-  var file_size;
-  if(file.value == "")
-  {
-    file_size = 0;
-  }
-  else{
-    file_size = file.files[0].size;
-  }
-  if(file_size<200000)
-  {
-  $.ajax({
-    type: "POST",
-    url: "php/branding.php",
-    data: new FormData(this),
-    processData: false,
-    contentType: false,
-    catch : false,
-    success: function(response){
-      alert(response);
-    }
-  });
-}
-else{
-  alert("please upload less than 200kb file");
-}
-});
-});
+        //branding details
+        $(document).ready(function () {
+            $(".branding-form").on("submit", function (e) {
+                e.preventDefault();
+                var file = document.getElementById("brand-logo");
+                var file_size;
+                if (file.value == "") {
+                    file_size = 0;
+                }
+                else {
+                    file_size = file.files[0].size;
+                }
+                if (file_size < 200000) {
+                    $.ajax({
+                        type: "POST",
+                        url: "php/branding.php",
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false,
+                        catch: false,
+                        success: function (response) {
+                            alert(response);
+                        }
+                    });
+                }
+                else {
+                    alert("please upload less than 200kb file");
+                }
+            });
+        });
 
-//branding details control
+        //branding details control
 
-$(document).ready(function(){
-$.ajax({
-  type: "POST",
-  url: "php/check_branding_table.php",
-  success: function(response){
-    var all_data = JSON.parse(response.trim());
-    $("#brand-name").val(all_data[0].brand_name);
-    $("#domain-name").val(all_data[0].domain_name);
-    $("#brand-email").val(all_data[0].brand_email);
-    $("#facebook").val(all_data[0].facebook);
-    $("#instagram").val(all_data[0].instagram);
-    $("#address").val(all_data[0].address);
-    $("#phone").val(all_data[0].phone);
-    $("#about-us").val(all_data[0].about_us);
-    $("#privacy-policy").val(all_data[0].privacy_policy);
-    $("#terms-conditions").val(all_data[0].terms_conditions);
-    $("#cookies").val(all_data[0].cookies);
-    $(".branding-from input,.branding-from textarea,.branding-form button").prop("disabled",true);
-    $(".brand_edit").click(function(){
-      $(".branding-from input,.branding-from textarea,.branding-form button").prop("disabled",false);
-      $("#brand-logo").removeAttr("required");
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "php/check_branding_table.php",
+                success: function (response) {
+                    var all_data = JSON.parse(response.trim());
+                    $("#brand-name").val(all_data[0].brand_name);
+                    $("#domain-name").val(all_data[0].domain_name);
+                    $("#brand-email").val(all_data[0].brand_email);
+                    $("#facebook").val(all_data[0].facebook);
+                    $("#instagram").val(all_data[0].instagram);
+                    $("#address").val(all_data[0].address);
+                    $("#phone").val(all_data[0].phone);
+                    $("#about-us").val(all_data[0].about_us);
+                    $("#privacy-policy").val(all_data[0].privacy_policy);
+                    $("#terms-conditions").val(all_data[0].terms_conditions);
+                    $("#cookies").val(all_data[0].cookies);
+                    $(".branding-from input,.branding-from textarea,.branding-form button").prop("disabled", true);
+                    $(".brand_edit").click(function () {
+                        $(".branding-from input,.branding-from textarea,.branding-form button").prop("disabled", false);
+                        $("#brand-logo").removeAttr("required");
+                    });
+                }
+            });
+        });
     });
-  }
-});
-});
-});
 }
 
 

@@ -38,7 +38,7 @@
         <ul class="collapse homepage-design-collapse">
             <li class="border-left p-2 collapse-item" access-link="header_showcase_design.php">Header Showcase</li>
             <li class="border-left p-2 collapse-item" access-link="category_showcase_design.php">Category Showcase</li>
-       
+
         </ul>
 
         <button class="btn w-100 text-left stock-update-btn" style="font-size:20px">
@@ -70,16 +70,53 @@
                     <textarea class="form-control" rows="5" id="subtitle-text" name="subtitle-text" maxlength="100"  required="required"></textarea>
                   </div>
                   <div class="form-group">
+                    <label for="create-button">Create buttons</label>
+                    <div class="input-group mb-2" id="create-button">
+                        <input type="url" name="btn-url" class="form-control btn-url" placeholder="https://google.com">
+
+                        <input type="text" class="form-control btn-name" name="btn-name" placeholder="button-1">
+
+                    </div>
+                    <div class="input-group mb-2">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">BG COLOR</span>
+                          </div>
+                          <input type="color" name="btn-bgcolor" class="form-control btn-bgcolor">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">TEXT COLOR</span>
+                          </div>
+                          <input type="color" name="btn-textcolor" class="form-control btn-textcolor">
+                    </div>
+                    <div class="input-group my-2">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">SIZE</span>
+                          </div>
+                          <select class="form-control btn-size">
+                              <option value="16px">small</option>
+                              <option value="20px">medium</option>
+                              <option value="24px">large</option>
+                          </select>
+
+                          <div class="input-group-append">
+                              <span class="input-group-text bg-danger add-btn text-light" style="cursor:pointer;">Add</span> 
+                          </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <button class="btn btn-primary py-2" type="submit">Add showcase</button>
                   </div>
-                 
+
                 </form>
               </div>
               <div class="col-md-1"></div>
               <div class="col-md-7 p-4 bg-white rounded-lg shadow-sm position-relative showcase-preview d-flex">
-              <div class="title-box">  
+              <div class="title-box">
               <h1 class="showcase-title target">TITLE</h1>
                 <h4 class="showcase-subtitle target">SUBTITLE</h4>
+                <div class="title-buttons my-3">
+
+
+                </div>
                   </div>
                 <div class="showcase-formating d-flex justify-content-around align-items-center">
                   <div class="btn-group">
@@ -96,7 +133,7 @@
                       </button>
                   </div>
 
-                 
+
                       <button class="btn btn-light dropdown-toggle" data-toggle="dropdown">
                       <span>Alignment</span>
 
@@ -109,11 +146,11 @@
                           <span class="dropdown-item alignment" align-position="v" align-value="flex-end">BOTTOM</span>
                         </div>
                       </button>
-                      
+
 
                 </div>
               </div>
-            
+
             </div>
         </div>
       </div>
@@ -142,7 +179,7 @@
           });
 
           $(this).on('dblclick',function(){
-            
+
             var i;
               for (i = 0; i <$(".target").length; i++) {
                 $(".target").css({
@@ -153,11 +190,11 @@
                 });
               }
           });
-          
-          
+
+
 
           });
-         
+
           $(".color-selector").on("change",function(){
                   var color = this.value;
                   var in_number = Number(sessionStorage.getItem('index_number'));
@@ -170,7 +207,7 @@
                   var in_number = Number(sessionStorage.getItem('index_number'));
                   var element = document.getElementsByClassName("target")[in_number];
                   element.style.fontSize = size+"%";
-                  
+
               });
         });
 
@@ -282,7 +319,8 @@
               h_align : h_align,
               v_align : v_align,
               title_text :title.innerHTML,
-              subtitle_text :subtitle.innerHTML
+              subtitle_text :subtitle.innerHTML,
+              button : $(".title-buttons").html().trim()
             };
             var formdata = new FormData();
             formdata.append("file_data",file);
@@ -302,7 +340,7 @@
             });
           });
         });
-        //alignment 
+        //alignment
         $(document).ready(function(){
           $(".alignment").each(function(){
             $(this).click(function(){
@@ -317,10 +355,36 @@
               }
               else if(align_position == "v"){
                 alignItems = align_value;
-              
+
                }
-               
+
             });
+          });
+        });
+
+        //================add btn =============================
+        $(document).ready(function(){
+          $(".add-btn").click(function(){
+            var button  = document.createElement("button");
+            button.className = "btn mr-2";
+            var a = document.createElement("a");
+            a.href = $(".btn-url").val();
+            a.innerHTML = $(".btn-name").val();
+            a.style.color = $(".btn-textcolor").val();
+            a.style.fontSize = $(".btn-size").val();
+            button.style.backgroundColor = $(".btn-bgcolor").val();
+            button.append(a);
+            $(".title-buttons").append(button);
+
+            var title_button = document.querySelector(".title-buttons");
+            var title_child = title_button.getElementsByTagName("button");
+            var button_length = title_child.length;
+            if(button_length == 0 || button_length == 1){
+              $(".title-buttons").append(button);
+            }
+            else{
+              alert("only two button are allowed");
+            }
           });
         });
       </script>

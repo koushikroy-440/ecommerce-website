@@ -12,21 +12,19 @@ echo '<div class="row slideInDown">
 						</div>
 					</div>
 					<div class="col-md-3">
-					
+
 					</div>
 					<div class="col-md-3 mb-3">
 						<select class="form-control brands-name" name="brands" placeholder="choose brands" required="required">
 							<option>Choose brands</option>';
-							$get_data = "SELECT brands FROM brands";
-							$response = $db->query($get_data);
-							if($response)
-							{
-								while($data = $response->fetch_assoc())
-								{
-									echo "<option>" .$data['brands']. "</option>";
-								}
-							}
-						echo '</select>
+$get_data = "SELECT brands FROM brands";
+$response = $db->query($get_data);
+if ($response) {
+    while ($data = $response->fetch_assoc()) {
+        echo "<option>" . $data['brands'] . "</option>";
+    }
+}
+echo '</select>
 					</div>
 					<div class="col-md-12">
 						<textarea class="form-control mb-3" rows="6" name="product-description" placeholder="product-description" required="required"></textarea>
@@ -42,7 +40,7 @@ echo '<div class="row slideInDown">
 						<label for="product-quantity">Product Quantity</label>
 						<input class="form-control mb-3" name="quantity" placeholder="20" required="required" id="product-quantity"></input>
 					</div>
-					
+
 					<div class="row">
 					<div class="col-md-12 d-flex justify-content-around mb-4">
 
@@ -61,7 +59,7 @@ echo '<div class="row slideInDown">
 						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
 							<label for="bottom">BOTTOM</label>
 							<input type="file" accept="image/*" id="bottom" name="bottom" style="width:100%;height:100%;">
-						</div>						
+						</div>
 						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
 							<label for="left">LEFT</label>
 							<input type="file" accept="image/*" id="left" name="left" style="width:100%;height:100%;">
@@ -72,7 +70,7 @@ echo '<div class="row slideInDown">
 						</div>
 					</div
 					</div>
-					
+
 				</div>
 				<div class="row">
 						<div class="col-md-9 mt-3">
@@ -86,9 +84,9 @@ echo '<div class="row slideInDown">
 						</div>
 					</div>
 
-		
+
 			</form>
-				
+
 		</div>
 
 </div>'

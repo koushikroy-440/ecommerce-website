@@ -1,5 +1,5 @@
 <?php
-            echo '
+echo '
             <div class="row">
             <div class="col-md-2"></div>
               <div class="col-md-8 bg-white rounded">
@@ -13,7 +13,7 @@
                     <label for="brand-logo"><b>upload brand logo</b></label>
                     <input type="file" class="form-control brand-logo" name="brand-logo" id="brand-logo">
                   </div>
-                
+
                   <div class="form-group">
                     <label for="domain-name"><b>enter domain name</b></label>
                     <input type="text" class="form-control domain-name" name="domain-name" id="domain-name">
@@ -61,13 +61,13 @@
                     <label for="cookies"><b>cookies terms and conditions </b><small class="cookies-count"> 0</small><small>/5000</small></label>
                     <textarea name="cookies" id="cookies" class="form-control cookies" cols="10" rows="8" name="cookies" maxlength="5000"></textarea>
                     </div>
-                    
+
                     <button class="btn btn-primary" type="submit">update</button>
                 </form>
 
-                
+
               </div>
               <div class="col-md-2"></div>
               </div>
               '
-              ?>
+?>

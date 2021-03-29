@@ -1,88 +1,73 @@
 <?php
-    require_once "../../common-files/php/database.php";
-    $dir;
-    
-    $product_title = $_POST['title'];
+require_once "../../common-files/php/database.php";
+$dir;
 
-    $product_description = $_POST['product-description'];
+$product_title = $_POST['title'];
 
-    $brands = $_POST['brands'];
-     $message = "";
-    //get category name
-    $get_cat_name = "SELECT category_name FROM brands WHERE brands = '$brands'";
-    $response = $db->query($get_cat_name);
-    if ($response)
-    {
-        $data = $response->fetch_assoc();
-    }
-    $price = $_POST['price'];
+$product_description = $_POST['product-description'];
 
-    $quantity = $_POST['quantity'];
+$brands = $_POST['brands'];
+$message = "";
+//get category name
+$get_cat_name = "SELECT category_name FROM brands WHERE brands = '$brands'";
+$response = $db->query($get_cat_name);
+if ($response) {
+    $data = $response->fetch_assoc();
+}
+$price = $_POST['price'];
 
-    $get_data = "SELECT * FROM products";
+$quantity = $_POST['quantity'];
 
-    $response = $db->query($get_data);
+$get_data = "SELECT * FROM products";
 
-    $all_files = [$_FILES['thumb'],$_FILES['front'],$_FILES['top'],$_FILES['bottom'],$_FILES['left'],$_FILES['right']];
-    $file_path = ['thumb_pic','front_pic','top_pic','bottom_pic','left_pic','right_pic'];
-    $length = count($all_files);
+$response = $db->query($get_data);
 
-    $check_dir = is_dir("../../stocks/".$data['category_name']."/".$brands."/".$product_title);
-    if($check_dir)
-    {
-        echo "folder already exist";
-        exit;
-    }
-    else{
-        $dir = mkdir("../../stocks/".$data['category_name']."/".$brands."/".$product_title);
-    }
+$all_files = [$_FILES['thumb'], $_FILES['front'], $_FILES['top'], $_FILES['bottom'], $_FILES['left'], $_FILES['right']];
+$file_path = ['thumb_pic', 'front_pic', 'top_pic', 'bottom_pic', 'left_pic', 'right_pic'];
+$length = count($all_files);
 
-  
-   
-    if($response)
-    {
-        $store_data = "INSERT INTO products(title,brands,description,price,quantity)
+$check_dir = is_dir("../../stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title);
+if ($check_dir) {
+    echo "folder already exist";
+    exit;
+} else {
+    $dir = mkdir("../../stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title);
+}
+
+if ($response) {
+    $store_data = "INSERT INTO products(title,brands,description,price,quantity)
         VALUES('$product_title','$brands','$product_description','$price','$quantity');
-        "; 
-        $response = $db->query($store_data);
-        if($response)
-        {
-            $current_id = $db->insert_id;
-            if($dir)
-            {
-             for($i = 0; $i < $length; $i++)
-             {
-                 $file = $all_files[$i];
-         
-                 $file_name = $file['name'];
-         
-                 $location = $file['tmp_name'];
-                 $current_url = "stocks/".$data['category_name']."/".$brands."/".$product_title."/".$file_name;
-                 if(move_uploaded_file($location,"../../stocks/".$data['category_name']."/".$brands."/".$product_title."/".$file_name))
-                 {
+        ";
+    $response = $db->query($store_data);
+    if ($response) {
+        $current_id = $db->insert_id;
+        if ($dir) {
+            for ($i = 0; $i < $length; $i++) {
+                $file = $all_files[$i];
+
+                $file_name = $file['name'];
+
+                $location = $file['tmp_name'];
+                $current_url = "stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title . "/" . $file_name;
+                if (move_uploaded_file($location, "../../stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title . "/" . $file_name)) {
                     $update_path = "UPDATE products SET $file_path[$i] = '$current_url' WHERE id = '$current_id' ";
                     $response = $db->query($update_path);
-                    if($response)
-                    {
+                    if ($response) {
                         $message = "success";
-                        
-                    }
-                    else{
+
+                    } else {
                         $message = "unable to update file path";
-                       
 
                     }
-                 }
-             }
-             echo $message;
+                }
             }
+            echo $message;
         }
-        else{
-            echo "unable to store data product table";
-        }
+    } else {
+        echo "unable to store data product table";
     }
-    else{
-            $create_table = "CREATE TABLE products(
+} else {
+    $create_table = "CREATE TABLE products(
                 id INT NOT NULL AUTO_INCREMENT,
                 brands VARCHAR(50),
                 title VARCHAR(100),
@@ -98,50 +83,40 @@
                 PRIMARY KEY (id)
             )";
 
-            $response = $db->query($create_table);
-            if($response)
-            {
-                $store_data = "INSERT INTO products(title,brands,description,price,quantity)
+    $response = $db->query($create_table);
+    if ($response) {
+        $store_data = "INSERT INTO products(title,brands,description,price,quantity)
                 VALUES('$product_title','$brands','$product_description','$price','$quantity');
-                "; 
-                $response = $db->query($store_data);
-                if($response)
-                {
-                    $current_id = $db->insert_id;
-                    if($dir)
-                    {
-                     for($i = 0; $i < $length; $i++)
-                     {
-                         $file = $all_files[$i];
-                 
-                         $file_name = $file['name'];
-                 
-                         $location = $file['tmp_name'];
-                         $current_url = "stocks/".$data['category_name']."/".$brands."/".$product_title."/".$file_name;
-                         if(move_uploaded_file($location,"../../stocks/".$data['category_name']."/".$brands."/".$product_title."/".$file_name))
-                         {
-                            $update_path = "UPDATE products SET $file_path[$i] = '$current_url' WHERE id = '$current_id' ";
-                            $response = $db->query($update_path);
-                            if($response)
-                            {
-                                $message ="success";
-                               
-                            }
-                            else{
-                                $message ="unable to update file path";
-                               
-                            }
-                         }
-                     }
-                     echo $message;
+                ";
+        $response = $db->query($store_data);
+        if ($response) {
+            $current_id = $db->insert_id;
+            if ($dir) {
+                for ($i = 0; $i < $length; $i++) {
+                    $file = $all_files[$i];
+
+                    $file_name = $file['name'];
+
+                    $location = $file['tmp_name'];
+                    $current_url = "stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title . "/" . $file_name;
+                    if (move_uploaded_file($location, "../../stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title . "/" . $file_name)) {
+                        $update_path = "UPDATE products SET $file_path[$i] = '$current_url' WHERE id = '$current_id' ";
+                        $response = $db->query($update_path);
+                        if ($response) {
+                            $message = "success";
+
+                        } else {
+                            $message = "unable to update file path";
+
+                        }
                     }
                 }
-                else{
-                    echo "unable to store data in products table";
-                }
+                echo $message;
             }
-            else{
-                echo "unable to store data in table";
-            }
+        } else {
+            echo "unable to store data in products table";
+        }
+    } else {
+        echo "unable to store data in table";
     }
-?>
+}
