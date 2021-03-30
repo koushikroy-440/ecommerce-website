@@ -20,11 +20,15 @@
         $v_align = $all_data['v_align'];
         $button = addslashes($all_data['button']);
 
-        $check_table = "SELECT * FROM header_showcase";
+        $check_table = "SELECT count(id) AS result FROM header_showcase";
         $response = $db->query($check_table);
         if($response)
         {
-                $store_data = "INSERT INTO header_showcase(title_image,title_text,title_color,title_size,subtitle_text,subtitle_size,subtitle_color,h_align,v_align,button)
+                $data = $response->fetch_assoc();
+                $count_rows = $data['result'];
+                if($count_rows < 3)
+                {
+                        $store_data = "INSERT INTO header_showcase(title_image,title_text,title_color,title_size,subtitle_text,subtitle_size,subtitle_color,h_align,v_align,button)
                         VALUES('$file_binary','$title_text','$title_color','$title_size','$subtitle_text','$subtitle_size','$subtitle_color','$h_align','$v_align','$button')";
                         $response = $db->query($store_data);
                         if($response)
@@ -34,16 +38,21 @@
                         else{
                                 echo "unable able to store data in header showcase";
                         }
+                }
+                else if($count_rows >= 3)
+                {
+                        echo "limit full";
+                }
         }
         else{
                 $create_table = "CREATE TABLE header_showcase(
                         id INT(11) NOT NULL AUTO_INCREMENT,
                         title_image MEDIUMBLOB,
                         title_text VARCHAR(225),
-                        title_color VARCHAR(10),
+                        title_color VARCHAR(20),
                         title_size VARCHAR(10),
                         subtitle_text VARCHAR(225),
-                        subtitle_color VARCHAR(10),
+                        subtitle_color VARCHAR(20),
                         subtitle_size VARCHAR(10),
                         h_align VARCHAR(20),
                         v_align VARCHAR(20),
@@ -62,7 +71,7 @@
                                echo "success"; 
                         }
                         else{
-                                echo "unable able to store data in header showcase";
+                                echo "unable able to store data in header showcase 484848";
                         }
                 }
                 else{

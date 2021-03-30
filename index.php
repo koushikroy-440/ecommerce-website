@@ -17,6 +17,27 @@
       <?php
              include_once("asset/nav.php");
       ?>
+      <div class="p-0 container-fluid">
+          <div class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                <?php
+                  $showcase = "SELECT * FROM header_showcase";
+                  $response = $db->query($showcase);
+                  if($response)
+                  {
+                    while($data = $response->fetch_assoc())
+                    {
+                      echo "<div class='carousel-item active'>";
+                      $image = "data:image/png;base64,".base64_encode($data['title_image']);
+                      echo "<img src='".$image."'class='w-100'>";
+                      echo "</div>";
+                    }
+                  }
+
+                ?>
+              </div>
+          </div>
+      </div>
       <?php
         include_once("asset/footer.php");
 

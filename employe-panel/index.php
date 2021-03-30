@@ -104,20 +104,21 @@
                   </div>
                   <div class="form-group">
                     <button class="btn btn-primary py-2" type="submit">Add showcase</button>
+                    <button class="btn btn-primary py-2 real-preview-btn" type="button">preview</button>
                   </div>
 
                 </form>
               </div>
               <div class="col-md-1"></div>
-              <div class="col-md-7 p-4 bg-white rounded-lg shadow-sm position-relative showcase-preview d-flex">
-              <div class="title-box">
-              <h1 class="showcase-title target">TITLE</h1>
-                <h4 class="showcase-subtitle target">SUBTITLE</h4>
-                <div class="title-buttons my-3">
+              <div class="col-md-7 p-4 bg-white rounded-lg shadow-sm position-relative showcase-preview d-flex" style="height:380px;">
+                  <div class="title-box">
+                  <h1 class="showcase-title target">TITLE</h1>
+                  <h4 class="showcase-subtitle target">SUBTITLE</h4>
+                  <div class="title-buttons my-3">
 
 
-                </div>
                   </div>
+                </div>
                 <div class="showcase-formating d-flex justify-content-around align-items-center">
                   <div class="btn-group">
                       <button class="btn btn-light">color</button>
@@ -386,6 +387,49 @@
               alert("only two button are allowed");
             }
           });
+        });
+
+        $(document).ready(function(){
+          $(".real-preview-btn").click(function(){
+          var file = document.querySelector("#title-image").files[0];
+          var form_data = new FormData();
+          form_data.append("photo",file);
+          var flex_box = document.querySelector(".showcase-preview");
+            var h_align = "";
+            var v_align = "";
+            if(flex_box.style.justifyContent == ""){
+              h_align = "flex-start";
+            }
+            else{
+              h_align = flex_box.style.justifyContent;
+            }
+
+            if(flex_box.style.alignItems == ""){
+              v_align = "flex-start";
+            }
+            else{
+              v_align = flex_box.style.alignItems;
+            }
+          var array = [$(".title-box").html().trim(),h_align,v_align];
+          form_data.append("data",JSON.stringify(array));
+          $.ajax({
+            type: "POST",
+            url: "php/preview.php",
+            data: form_data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(response){
+             
+                var page = window.open("about:blank");
+                page.document.open();
+                page.document.write(response);
+                page.document.close();
+              
+            }
+
+          });
+        });
         });
       </script>
 
