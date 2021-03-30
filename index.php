@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </head>
   <body class="bg-light">
       
@@ -27,9 +32,30 @@
                   {
                     while($data = $response->fetch_assoc())
                     {
-                      echo "<div class='carousel-item active'>";
+                      $h_align = $data['h_align'];
+                      $text_align = "";
+                      if($h_align == "center")
+                      {
+                          $text_align = "text-center";
+                      }
+                      else{
+                          $text_align = "text-center";
+                      }
+                      $v_align = $data['v_align'];
+                      $title_color = $data['title_color'];
+                      $title_size = $data['title_size'];
+                      $subtitle_color = $data['subtitle_color'];
+                      $subtitle_size = $data['subtitle_size'];
+                      echo "<div class='carousel-item carousel-item-control'>";
                       $image = "data:image/png;base64,".base64_encode($data['title_image']);
                       echo "<img src='".$image."'class='w-100'>";
+                      echo "<div class='carousel-caption d-flex h-100' style='justify-content:".$h_align.";align-items:".$v_align."'>";
+                      echo "<div>";
+                      echo "<h1 style='color:".$title_color.";font-size:".$title_size."'>".$data['title_text']."</h1>";
+                      echo "<h4 style='color:".$subtitle_color.";font-size:".$subtitle_size."'>".$data['subtitle_text']."</h4>";
+                      echo $data['buttons'];
+                      echo "</div>";
+                      echo "</div>";
                       echo "</div>";
                     }
                   }
@@ -42,10 +68,11 @@
         include_once("asset/footer.php");
 
       ?>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      <script>
+    $(document).ready(function(){
+            var carousel_item = document.querySelector(".carousel-item-control");
+            $(carousel_item).addClass("active");
+        });
+        </script>
   </body>
 </html>

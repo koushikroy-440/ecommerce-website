@@ -1,3 +1,6 @@
+<?php
+  require_once ("../common-files/databases/database.php");
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -104,7 +107,29 @@
                   </div>
                   <div class="form-group">
                     <button class="btn btn-primary py-2" type="submit">Add showcase</button>
-                    <button class="btn btn-primary py-2 real-preview-btn" type="button">preview</button>
+                    <button class="btn btn-primary py-2 real-preview-btn" type="button">Real preview</button>
+                  </div>
+                  <div class="form-group">
+                      <label for="edit-title">Edit title</label>
+                      <select class="form-control" id="edit-title">
+                          <option>choose title</option>
+
+                          <?php
+                              $get_data = "SELECT * FROM header_showcase";
+                              $response = $db->query($get_data);
+                              $count = 0;
+                              if($response)
+                              {
+                                  
+                                  while($data = $response->fetch_assoc())
+                                  {
+                                    $count += 1;
+                                    echo "<option value=".$data['id'].">".$count."</option>";
+                                  }
+                              }
+                          ?>
+                      </select>
+
                   </div>
 
                 </form>
@@ -227,6 +252,9 @@
                   if(o_width < 1920 && o_height < 978)
                   {
                     image.style.width = "100%";
+                    image.style.position = "absolute";
+                    image.style.top = "0";
+                    image.style.left = "0";
                     $(".showcase-preview").append(image);
                   }
                   else{
@@ -430,6 +458,44 @@
 
           });
         });
+        });
+
+        //edit title
+        $(document).ready(function(){
+          $("#edit-title").on("change", function(){
+            if($(this).val() != "choose title"){
+                $.ajax({
+                  type: "POST",
+                  url: "php/edit_title.php",
+                  data: {
+                    id : $(this).val(),
+                  },
+                  success: function(response)
+                  {
+                    var all_data = JSON.parse(response.trim());
+                    var image = document.createElement("img");
+                    image.src = all_data[0];
+                    image.style.width = "100%";
+                    image.style.position = "absolute";
+                    image.style.top = "0";
+                    image.style.left = "0";
+                    $(".showcase-preview").append(image);
+                    $(".showcase-title").html(all_data[1]);
+                    $(".showcase-title").css({
+                      color : all_data[2],
+                      fontSize : all_data[3]
+                    });
+
+                    $(".showcase-subtitle").html(all_data[4]);
+                    $(".showcase-subtitle").css({
+                      color : all_data[5],
+                      fontSize : all_data[6]
+                    });
+                    $(".title-buttons").html(all_data[9]); 
+                  }
+                });
+            }
+          });
         });
       </script>
 

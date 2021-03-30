@@ -1,3 +1,4 @@
+
 <?php
     $file = $_FILES['photo'];
     $location = $file['tmp_name'];
