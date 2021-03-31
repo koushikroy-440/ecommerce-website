@@ -28,7 +28,7 @@
                 $count_rows = $data['result'];
                 if($count_rows < 3)
                 {
-                        $store_data = "INSERT INTO header_showcase(title_image,title_text,title_color,title_size,subtitle_text,subtitle_size,subtitle_color,h_align,v_align,button)
+                        $store_data = "INSERT INTO header_showcase(title_image,title_text,title_color,title_size,subtitle_text,subtitle_size,subtitle_color,h_align,v_align,buttons)
                         VALUES('$file_binary','$title_text','$title_color','$title_size','$subtitle_text','$subtitle_size','$subtitle_color','$h_align','$v_align','$button')";
                         $response = $db->query($store_data);
                         if($response)
@@ -36,7 +36,7 @@
                                echo "success"; 
                         }
                         else{
-                                echo "unable able to store data in header showcase";
+                                echo "unable able to store data in header showcase 484848";
                         }
                 }
                 else if($count_rows >= 3)

@@ -1,5 +1,5 @@
 <?php
-  require_once ("../common-files/databases/database.php");
+require_once "../common-files/databases/database.php";
 ?>
 <!doctype html>
 <html lang="en">
@@ -58,7 +58,7 @@
         <div class="page">
             <div class="row">
               <div class="col-md-4 p-4 bg-white rounded-lg shadow-sm">
-                <form class="header showcase-form">
+                <form class="header-showcase-form">
                   <div class="form-group">
                     <label for="title-image">Title image<span> 200kb (1920*978)</span></label>
                     <input type="file" accept="image/*" class="form-control" name="title-image" id="title-image" required="required">
@@ -74,6 +74,7 @@
                   </div>
                   <div class="form-group">
                     <label for="create-button">Create buttons</label>
+                    <i class="fa fa-trash delete-btn close d-none"></i>
                     <div class="input-group mb-2" id="create-button">
                         <input type="url" name="btn-url" class="form-control btn-url" placeholder="https://google.com">
 
@@ -101,33 +102,32 @@
                           </select>
 
                           <div class="input-group-append">
-                              <span class="input-group-text bg-danger add-btn text-light" style="cursor:pointer;">Add</span> 
+                              <span class="input-group-text bg-danger add-btn text-light" style="cursor:pointer;">Add</span>
                           </div>
                     </div>
                   </div>
                   <div class="form-group">
-                    <button class="btn btn-primary py-2" type="submit">Add showcase</button>
+                    <button class="btn btn-primary py-2 add-showcase-btn" type="submit">Add showcase</button>
                     <button class="btn btn-primary py-2 real-preview-btn" type="button">Real preview</button>
                   </div>
                   <div class="form-group">
                       <label for="edit-title">Edit title</label>
+                      <i class="fa fa-trash delete-edit d-none close"></i>
                       <select class="form-control" id="edit-title">
                           <option>choose title</option>
 
                           <?php
-                              $get_data = "SELECT * FROM header_showcase";
-                              $response = $db->query($get_data);
-                              $count = 0;
-                              if($response)
-                              {
-                                  
-                                  while($data = $response->fetch_assoc())
-                                  {
-                                    $count += 1;
-                                    echo "<option value=".$data['id'].">".$count."</option>";
-                                  }
-                              }
-                          ?>
+$get_data = "SELECT * FROM header_showcase";
+$response = $db->query($get_data);
+$count = 0;
+if ($response) {
+
+    while ($data = $response->fetch_assoc()) {
+        $count += 1;
+        echo "<option value=" . $data['id'] . ">" . $count . "</option>";
+    }
+}
+?>
                       </select>
 
                   </div>
@@ -284,7 +284,7 @@
           });
 
           //add Showcase
-          $(".showcase-form").submit(function(e){
+          $(".header-showcase-form").submit(function(e){
             e.preventDefault();
             var title = document.querySelector(".showcase-title");
             var subtitle = document.querySelector(".showcase-subtitle");
@@ -395,7 +395,8 @@
         $(document).ready(function(){
           $(".add-btn").click(function(){
             var button  = document.createElement("button");
-            button.className = "btn mr-2";
+
+            button.className = "btn mr-2 title-btn";
             var a = document.createElement("a");
             a.href = $(".btn-url").val();
             a.innerHTML = $(".btn-name").val();
@@ -448,12 +449,12 @@
             contentType: false,
             cache: false,
             success: function(response){
-             
+
                 var page = window.open("about:blank");
                 page.document.open();
                 page.document.write(response);
                 page.document.close();
-              
+
             }
 
           });
@@ -462,8 +463,10 @@
 
         //edit title
         $(document).ready(function(){
+          var showcase_preview = $(".showcase-preview").html();
           $("#edit-title").on("change", function(){
             if($(this).val() != "choose title"){
+              
                 $.ajax({
                   type: "POST",
                   url: "php/edit_title.php",
@@ -472,6 +475,43 @@
                   },
                   success: function(response)
                   {
+                    var selected_value = $("#edit-title").val();
+                    $(".add-showcase-btn").html("Save edit");
+                    $(".add-showcase-btn").removeClass("bg-primary");
+                    $(".add-showcase-btn").addClass("bg-danger");
+                    $(".delete-edit").removeClass("d-none");
+                    $(".delete-edit").click(function(){
+                      $.ajax({
+                        type: "POST",
+                        url: "php/delete_title.php",
+                        data:{
+                          id: $("#edit-title").val(),
+                        },
+                        success: function(response)
+                        {
+                            if(response.trim() == "success")
+                            {
+                              $(".add-showcase-btn").html("Add showcase");
+                              $(".add-showcase-btn").removeClass("bg-danger");
+                              $(".add-showcase-btn").addClass("bg-primary");
+                              $(".header-showcase-form").trigger("reset");
+                              $(".showcase-preview").html(showcase_preview);
+                              $(".delete-edit").addClass("d-none");
+                              var op = $("#edit-title option");
+                              op[0].selected = "selected";
+                              var i;
+                              for(i=0;i<op.length;i++)
+                              {
+                                if(op[i].value == selected_value)
+                                {
+                                  op[i].remove();
+                                }
+                              }
+                
+                            }
+                        }
+                      });
+                    });
                     var all_data = JSON.parse(response.trim());
                     var image = document.createElement("img");
                     image.src = all_data[0];
@@ -491,9 +531,102 @@
                       color : all_data[5],
                       fontSize : all_data[6]
                     });
-                    $(".title-buttons").html(all_data[9]); 
+                    $(".title-buttons").html(all_data[9]);
+                    $("#title-text").val(all_data[1]);
+                    $("#subtitle-text").val(all_data[4]);
+
+                    //edit btn button
+                    $(".title-btn").each(function(){
+                      $(this).click(function(){
+
+                        sessionStorage.setItem("btn-key",$(this).index());
+                        $(".delete-btn").removeClass("d-none");
+                        var url = $(this).children().attr("href");
+                        $(".btn-url").val(url);
+                        var name = $(this).children().html();
+                        $(".btn-name").val(name);
+                        var color = $(this).css("backgroundColor").replace("rgb(",'').replace(")",'');
+                        var rgb = color.split(",");
+                        var i;
+                        var color_code = "";
+                        for(i=0;i<rgb.length;i++)
+                        {
+                            var hex_code = Number(rgb[i]).toString(16);
+                            color_code += hex_code.length == 1 ? "0"+hex_code : hex_code;
+
+                        }
+                        $(".btn-bgcolor").val("#"+color_code);
+
+
+                        var text_color = $(this).children().css("color").replace("rgb(",'').replace(")",'');
+                        var text_rgb = text_color.split(",");
+                        var i;
+                        var text_color_code = "";
+                        for(i=0;i<text_rgb.length;i++)
+                        {
+                            var text_hex_code = Number(text_rgb[i]).toString(16);
+                            text_color_code += text_hex_code.length == 1 ? "0"+text_hex_code : text_hex_code;
+
+                        }
+                        $(".btn-textcolor").val("#"+text_color_code);
+
+                        var btn_size = $(this).children().css('fontSize');
+                        for(i=0;i<$(".btn-size").children().length;i++){
+                          var option = $(".btn-size").children();
+                          if(option[i].value == btn_size)
+                          {
+                            option[i].selected = true;
+                          }
+                        }
+
+                      });
+                    });
+                    $(".btn-name").on("input",function(){
+                      var index_no = Number(sessionStorage.getItem("btn_key"));
+                      var selected_btn = document.getElementsByClassName("title-btn")[index_no];
+                      selected_btn.getElementsByTagName("A")[0].innerHTML = this.value;
+                    });
+
+                    $(".btn-bgcolor").on("change",function(){
+                      var index_no = Number(sessionStorage.getItem("btn_key"));
+                      var selected_btn = document.getElementsByClassName("title-btn")[index_no];
+                      selected_btn.style.backgroundColor = this.value;
+                    });
+
+                    $(".btn-textcolor").on("change",function(){
+                      var index_no = Number(sessionStorage.getItem("btn_key"));
+                      var selected_btn = document.getElementsByClassName("title-btn")[index_no];
+                      selected_btn.getElementsByTagName("A")[0].style.color = this.value;
+                    });
+                    $(".btn-size").on("change",function(){
+                      var index_no = Number(sessionStorage.getItem("btn_key"));
+                      var selected_btn = document.getElementsByClassName("title-btn")[index_no];
+                      selected_btn.getElementsByTagName("A")[0].fontSize = this.value;
+
+                    });
+
+                    $(".delete-btn").on("click",function(){
+                      var index_no = Number(sessionStorage.getItem("btn_key"));
+                      var selected_btn = document.getElementsByClassName("title-btn")[index_no];
+                      selected_btn.remove();
+                      $(".btn-url,.btn-name").val("");
+                      $(".btn-bgcolor,.btn-textcolor").val("#000000");
+                      var op = $(".btn-size option");
+                      op[0].selected = "selected";
+                      $(".delete-btn").addClass("d-none");
+                    });
+
                   }
                 });
+            }
+            else{
+              $(".add-showcase-btn").html("Add showcase");
+              $(".add-showcase-btn").removeClass("bg-danger");
+              $(".add-showcase-btn").addClass("bg-primary");
+              $(".header-showcase-form").trigger("reset");
+              $(".showcase-preview").html(showcase_preview);
+              $(".delete-edit").addClass("d-none");
+
             }
           });
         });
