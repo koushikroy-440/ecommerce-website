@@ -1,13 +1,20 @@
 <?php
         require_once("../../common-files/databases/database.php");
-        $file = $_FILES['file_data'];
-        $location = $file['tmp_name'];
-        $file_binary = addslashes(file_get_contents($location));
+        $file = "";
+        $location = "";
+        $file_binary = "";
+        if($_FILES)
+        {
+                $file = $_FILES['file_data'];
+                $location = $file['tmp_name'];
+                $file_binary = addslashes(file_get_contents($location));
+        }
+        
 
         $json_data = json_encode($_POST['css_data']);
         $tmp_data = json_decode($json_data, true);
         $all_data = json_decode($tmp_data, true);
-        
+        $option = $all_data['option'];
         $title_text = addslashes($all_data['title_text']);
         $title_color = $all_data['title_color'];
         $title_size = $all_data['title_size'];
@@ -28,20 +35,75 @@
                 $count_rows = $data['result'];
                 if($count_rows < 3)
                 {
-                        $store_data = "INSERT INTO header_showcase(title_image,title_text,title_color,title_size,subtitle_text,subtitle_size,subtitle_color,h_align,v_align,buttons)
-                        VALUES('$file_binary','$title_text','$title_color','$title_size','$subtitle_text','$subtitle_size','$subtitle_color','$h_align','$v_align','$button')";
-                        $response = $db->query($store_data);
-                        if($response)
-                        {
-                               echo "success"; 
+                        if($option == "choose title"){
+                        
+                                $store_data = "INSERT INTO header_showcase(title_image,title_text,title_color,title_size,subtitle_text,subtitle_size,subtitle_color,h_align,v_align,buttons)
+                                VALUES('$file_binary','$title_text','$title_color','$title_size','$subtitle_text','$subtitle_size','$subtitle_color','$h_align','$v_align','$button')";
+                                $response = $db->query($store_data);
+                                if($response)
+                                {
+                                echo "success"; 
+                                }
+                                else{
+                                        echo "unable able to store data in header showcase 484848";
+                                }
                         }
                         else{
-                                echo "unable able to store data in header showcase 484848";
+                                if($file == ""){
+                                        $update_data = "UPDATE header_showcase SET title_text = '$title_text',title_color = '$title_color',title_size = '$title_size',subtitle_text = '$subtitle_text',subtitle_size = '$subtitle_size',subtitle_color = '$subtitle_color',h_align = '$h_align',v_align = '$v_align',buttons = '$button' ";
+                                        $response = $db->query($update_data);
+                                        if($response)
+                                        {
+                                                echo "update success";
+                                        }
+                                        else{
+                                                echo "update failed";
+                                        }
+                                }
+                                else{
+                                        $update_data = "UPDATE header_showcase SET title_image = '$file_binary',title_text = '$title_text',title_color = '$title_color',title_size = '$title_size',subtitle_text = '$subtitle_text',subtitle_size = '$subtitle_size',subtitle_color = '$subtitle_color',h_align = '$h_align',v_align = '$v_align',buttons = '$button' ";
+                                        $response = $db->query($update_data);
+                                        if($response)
+                                        {
+                                                echo "update success";
+                                        }
+                                        else{
+                                                echo "update failed";
+                                        }  
+                                }
                         }
+                        
                 }
                 else if($count_rows >= 3)
                 {
-                        echo "limit full";
+                        if($option == "choose title")
+                        {
+                                echo "limit full";
+                        }
+                        else{
+                                if($file == ""){
+                                        $update_data = "UPDATE header_showcase SET title_text = '$title_text',title_color = '$title_color',title_size = '$title_size',subtitle_text = '$subtitle_text',subtitle_size = '$subtitle_size',subtitle_color = '$subtitle_color',h_align = '$h_align',v_align = '$v_align',buttons = '$button' ";
+                                        $response = $db->query($update_data);
+                                        if($response)
+                                        {
+                                                echo "update success";
+                                        }
+                                        else{
+                                                echo "update failed";
+                                        }
+                                }
+                                else{
+                                        $update_data = "UPDATE header_showcase SET title_image = '$file_binary',title_text = '$title_text',title_color = '$title_color',title_size = '$title_size',subtitle_text = '$subtitle_text',subtitle_size = '$subtitle_size',subtitle_color = '$subtitle_color',h_align = '$h_align',v_align = '$v_align',buttons = '$button' ";
+                                        $response = $db->query($update_data);
+                                        if($response)
+                                        {
+                                                echo "update success";
+                                        }
+                                        else{
+                                                echo "update failed";
+                                        }  
+                                }
+                        }
                 }
         }
         else{
