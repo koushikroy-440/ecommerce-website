@@ -1,5 +1,5 @@
 <?php
-require_once "common-files/databases/database.php";
+require_once ("common-files/databases/database.php");
 ?>
 <!doctype html>
 <html lang="en">
@@ -81,7 +81,7 @@ include_once "asset/footer.php";
 ?>
   <script>
     $(document).ready(function(){
-      $(".signup-form").submit(function(e){
+      $(".signup-form").on("submit", function(e){
         e.preventDefault();
         $.ajax({
           type: "POST",

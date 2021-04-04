@@ -1,5 +1,5 @@
 <?php
-    require_once "common-files/databases/database.php";
+    require_once ("common-files/databases/database.php");
 ?>
 <!doctype html>
 <html lang="en">
