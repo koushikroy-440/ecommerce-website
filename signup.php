@@ -27,7 +27,7 @@ include_once "asset/nav.php";
       <hr>
         <div class="row">
           <div class="col-md-6">
-            <form class="signup-form " enctype="form-data/multipart" >
+            <form class="signup-form">
               <div class="form-group">
                 <label for="first_name">First Name<sup class="text-danger">*</sup></label>
                 <input type="text" name="firstname" class="form-control bg-light" placeholder="First Name" id="first_name">
@@ -83,6 +83,7 @@ include_once "asset/footer.php";
     $(document).ready(function(){
       $(".signup-form").on("submit", function(e){
         e.preventDefault();
+        
         $.ajax({
           type: "POST",
           url:"pages/php/register.php",
@@ -94,6 +95,7 @@ include_once "asset/footer.php";
               $(".register-btn").html("please wait....");
           },
           success: function(response){
+            // console.log(response);
               if(response == "success")
               {
                 $(".otp-form").removeClass("d-none");
@@ -105,11 +107,11 @@ include_once "asset/footer.php";
                   url:"pages/php/verify_otp.php",
                   data:{
                      otp: $(".otp").val().trim(),
-                     email: $(".email").trim().val()
-                  }
+                     email: $(".email").val().trim()
+                  },
                   beforeSend: function(){
                     $(this).html("please wait....");
-                  }
+                  },
                   success: function(response){
                     if(response.trim() == "success")
                     {
@@ -121,7 +123,7 @@ include_once "asset/footer.php";
                         $(".verify-btn").html("verify");
                         $(".otp").val("");
 
-                        },3000)
+                        },30000);
                     }
                   }
                 });
@@ -133,7 +135,7 @@ include_once "asset/footer.php";
                       url:"pages/php/resend_sms.php",
                       data:{
                         mobile : $(".mobile").val()
-                      }
+                      },
                       success: function(response){
                         if(response.trim() == "success")
                         {

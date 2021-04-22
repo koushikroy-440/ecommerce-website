@@ -6,16 +6,26 @@
     $response = $db->query($get_data);
     if($response)
     {
-        if($response->num_rows() != 0){
+        if($response->num_rows > 0){
             $data = $response->fetch_assoc();
             $status = $data['status'];
-            if($status == "pendings")
+            $real_username = $data['email'];
+            $real_password = $data['password'];
+            if($status == "pending")
             {
                 $mobile = $data['mobile'];
                 require("sendsms.php");
             }
             else{
-                echo "active";
+                if($real_username == $email && $real_password == $password)
+                {
+                        session_start();
+                        $_SESSION['username'] = $email;
+                        echo "login success";
+                }
+                else{
+                    echo "<b>incorrect password</b>"
+                }
             }
         }
 
