@@ -1,7 +1,7 @@
 <?php
     require_once("../../common-files/php/database.php");
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = md5($_POST['password']);
     $get_data = "SELECT * FROM users WHERE  email = '$email' ";
     $response = $db->query($get_data);
     if($response)
@@ -21,10 +21,17 @@
                 {
                         session_start();
                         $_SESSION['username'] = $email;
+                        $cooke_data = base64_encode($email);
+                        $cookie_time = time()+(60*60*24*365);
+                        setcookie('_au_',$cooke_data,$cookie_time,'/');
                         echo "login success";
                 }
                 else{
-                    echo "<b>incorrect password</b>"
+                    echo "<b>incorrect password</b>";
+                    // echo $real_password;
+                    // echo $password;
+                    // echo $real_username;
+                    // echo $email;
                 }
             }
         }

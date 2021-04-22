@@ -78,7 +78,7 @@
                 contentType: false,
                 cache: false,
                 success: function(response){
-                  console.log(response);
+                  // console.log(response);
                   if(response.trim() == "success")
                   {
                     $(".otp-form").removeClass("d-none");
@@ -147,8 +147,9 @@
                     window.location = "index.php";
                   }
                   else{
+                    // console.log(response);
                     var message = document.createElement("div");
-                    message.innerHTML = "<b>"response"</b>";
+                   message.innerHTML = "<b>"+response+"</b>";
                     message.className = "alert alert-warning";
                     $(".login-notice").html(message);
 
