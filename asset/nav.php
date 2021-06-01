@@ -37,10 +37,12 @@
                 <?php
                 $logo_string = base64_encode($branding_data['brand_logo']);
                 $complete_string = "data:image/png;base64".$logo_string;
-                echo "<image src='".$complete_string."' width='40'>";
+                echo "<image src='".$complete_string."' width='20'>";
+                echo "&nbsp";
                     echo $branding_data['brand_name'];
                 ?>
             </a>
+        <div class="collapse navbar-collapse" id="menu-box">
         <ul class="navbar-nav">
             <?php
                 $data = "SELECT category_name from category";
@@ -55,10 +57,11 @@
 
             ?>
         </ul>
+        </div>
         <div class="btn-group ml-auto">
+            <button class="btn border navbar-toggler" data-toggle="collapse" data-target="#menu-box"><i class="fa fa-bars"></i></button>
             <button class="btn border"><i class="fa fa-shopping-bag"></i></button>
             <button class="btn border"><i class="fa fa-search"></i></button>
-
             <button class="btn border dropdown">
             <i class="fa fa-user dropdown-toggle" data-toggle="dropdown"></i>
             <div class="dropdown-menu">
