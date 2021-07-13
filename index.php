@@ -14,9 +14,11 @@ require_once "common-files/databases/database.php";
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="pages/js/index.js"></script>
+
   <style>
     .carousel-caption {
       line-height: 80px;
@@ -65,12 +67,12 @@ require_once "common-files/databases/database.php";
   </style>
 </head>
 
-<body class="bg-light">
+<body class="bg-white">
 
   <?php
   include_once("asset/nav.php");
   ?>
-  <div class="p-0 container-fluid">
+  <div class="p-0 container-fluid mt-5">
     <div class="carousel slide" data-ride="carousel" id="top-slider">
       <div class="carousel-inner">
         <?php
@@ -113,7 +115,7 @@ require_once "common-files/databases/database.php";
   <div>
 
     <div class="container animated fadeIn" id="category-showcase">
-      <h2 style="text-align: center" class="mt-2 mb-4">CATEGORY showcase</h2>
+      <h2 style="text-align: center" class="mt-4 mb-4">CATEGORY showcase</h2>
 
       <div class="row">
         <?php
@@ -197,6 +199,35 @@ require_once "common-files/databases/database.php";
   </div>
 
   <!-- end category showcase -->
+  <div class="container-fluid">
+  <h4 class="text-center my-4">PRODUCTS FOR YOU</h4>
+      <div class="row">
+        <?php
+            $get_data = "SELECT * FROM products LIMIT 8";
+            $response = $db->query($get_data);
+            if($response)
+            {
+              while($data = $response->fetch_assoc())
+              {
+                echo"<div class='col-md-3 py-5' align='center'>";
+                echo"<img src='".$data['thumb_pic'] ."' width='250' height='316'><br>";
+                echo"<span class='font-weight-bold text-uppercase'>".$data['brands']."</span><br> ";
+                echo"<i class='fa fa-star text-warning'></i>";
+                echo"<i class='fa fa-star text-warning'></i>";
+                echo"<i class='fa fa-star-o text-warning'></i>";
+                echo"<i class='fa fa-star-o text-warning'></i>";
+                echo"<i class='fa fa-star-o text-warning'></i><br>";
+                echo"<span>".$data['title']."</span> <br>";
+                echo"<span><i class='fa fa-rupee'> </i>". $data['price']."</span>";
+                echo"<br><button class='btn btn-success cart-btn' product-id='".$data['id'] ."' product-title='".$data['title']."' product-brand='".$data['brands']."' product-price='".$data['price']."' product-pic='".$data['thumb_pic']."'><i class='fa fa-shopping-cart'></i> ADD TO CART</button> 
+                <button class='btn btn-primary buy-btn' product-id='".$data['id'] ."'  product-title='".$data['title']."' product-brand='".$data['brands']."' product-price='".$data['price']."' product-pic='".$data['thumb_pic']."'><i class='fa fa-shopping-bag'></i> SHOP NOW</button>";
+                echo "</div>";
+              }
+            }
+
+        ?>
+      </div>
+  </div>
   <?php
   include_once("asset/footer.php");
 

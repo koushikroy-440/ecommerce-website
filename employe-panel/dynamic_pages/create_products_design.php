@@ -17,11 +17,11 @@ echo '<div class="row slideInDown">
 					<div class="col-md-3 mb-3">
 						<select class="form-control brands-name" name="brands" placeholder="choose brands" required="required">
 							<option>Choose brands</option>';
-$get_data = "SELECT brands FROM brands";
+$get_data = "SELECT * FROM brands";
 $response = $db->query($get_data);
 if ($response) {
     while ($data = $response->fetch_assoc()) {
-        echo "<option>" . $data['brands'] . "</option>";
+        echo "<option c-name =".$data['category_name'].">" . $data['brands'] . "</option>";
     }
 }
 echo '</select>
@@ -47,19 +47,17 @@ echo '</select>
 						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
 							<label for="thumb">THUMB</label>
 							<input type="file" accept="image/*" id="thumb" name="thumb" style="width:100%;height:100%;">
+							
 						</div>
 						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
 							<label for="front">FRONT</label>
 							<input type="file" accept="image/*" id="front" name="front" style="width:100%;height:100%;">
 						</div>
 						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
-							<label for="top">TOP</label>
-							<input type="file" accept="image/*" id="top" name="top" style="width:100%;height:100%;">
+							<label for="top">BACK</label>
+							<input type="file" accept="image/*" id="top" name="back" style="width:100%;height:100%;">
 						</div>
-						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
-							<label for="bottom">BOTTOM</label>
-							<input type="file" accept="image/*" id="bottom" name="bottom" style="width:100%;height:100%;">
-						</div>
+						
 						<div style="width:100px;height:100px;border:1px solid red;overflow:hidden">
 							<label for="left">LEFT</label>
 							<input type="file" accept="image/*" id="left" name="left" style="width:100%;height:100%;">

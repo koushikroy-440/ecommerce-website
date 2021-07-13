@@ -54,6 +54,25 @@ include_once "asset/nav.php";
               </div>
 
               <div class="form-group">
+                <label for="address">Address <sup class="text-danger">*</sup></label>
+                <textarea name="address" id="address"  class="form-control bg-light"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="state">State<sup class="text-danger">*</sup></label>
+                <input type="text" id="state" name="state" class="form-control bg-light">
+              </div>
+
+              <div class="form-group">
+                <label for="country">Country<sup class="text-danger">*</sup></label>
+                <input type="text" id="country" name="country" class="form-control bg-light">
+              </div>
+
+              <div class="form-group">
+                <label for="pin-code">PinCode<sup class="text-danger">*</sup></label>
+                <input type="number" id="pin-code" name="pin-code" class="form-control bg-light">
+              </div>
+
+              <div class="form-group">
                 <button type="submit" class="btn btn-primary register-btn shadow-sm py-2">Register now</button>
 
               </div>

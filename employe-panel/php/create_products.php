@@ -2,6 +2,7 @@
 require_once "../../common-files/php/database.php";
 $dir;
 
+$c_name = $_GET['c_name'];
 $product_title = $_POST['title'];
 
 $product_description = $_POST['product-description'];
@@ -22,8 +23,8 @@ $get_data = "SELECT * FROM products";
 
 $response = $db->query($get_data);
 
-$all_files = [$_FILES['thumb'], $_FILES['front'], $_FILES['top'], $_FILES['bottom'], $_FILES['left'], $_FILES['right']];
-$file_path = ['thumb_pic', 'front_pic', 'top_pic', 'bottom_pic', 'left_pic', 'right_pic'];
+$all_files = [$_FILES['thumb'], $_FILES['front'], $_FILES['back'], $_FILES['left'], $_FILES['right']];
+$file_path = ['thumb_pic', 'front_pic', 'back_pic', 'left_pic', 'right_pic'];
 $length = count($all_files);
 
 $check_dir = is_dir("../../stocks/" . $data['category_name'] . "/" . $brands . "/" . $product_title);
@@ -35,8 +36,8 @@ if ($check_dir) {
 }
 
 if ($response) {
-    $store_data = "INSERT INTO products(title,brands,description,price,quantity)
-        VALUES('$product_title','$brands','$product_description','$price','$quantity');
+    $store_data = "INSERT INTO products(category_name,title,brands,description,price,quantity)
+        VALUES('$c_name','$product_title','$brands','$product_description','$price','$quantity');
         ";
     $response = $db->query($store_data);
     if ($response) {
@@ -69,6 +70,7 @@ if ($response) {
 } else {
     $create_table = "CREATE TABLE products(
                 id INT NOT NULL AUTO_INCREMENT,
+                category_name VARCHAR(50),
                 brands VARCHAR(50),
                 title VARCHAR(100),
                 description VARCHAR(200),
@@ -76,8 +78,8 @@ if ($response) {
                 quantity INT(10),
                 thumb_pic VARCHAR(100) NULL,
                 front_pic VARCHAR(100) NULL,
-                top_pic VARCHAR(100) NULL,
-                bottom_pic VARCHAR(100) NULL,
+                back_pic VARCHAR(100) NULL,
+               
                 left_pic VARCHAR(100),
                 right_pic VARCHAR(100) NULL,
                 PRIMARY KEY (id)
@@ -85,8 +87,8 @@ if ($response) {
 
     $response = $db->query($create_table);
     if ($response) {
-        $store_data = "INSERT INTO products(title,brands,description,price,quantity)
-                VALUES('$product_title','$brands','$product_description','$price','$quantity');
+        $store_data = "INSERT INTO products(category_name,title,brands,description,price,quantity)
+                VALUES('$c_name','$product_title','$brands','$product_description','$price','$quantity');
                 ";
         $response = $db->query($store_data);
         if ($response) {
