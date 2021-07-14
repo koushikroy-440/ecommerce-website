@@ -36,6 +36,7 @@ function add_to_cart() {
                             product_pic: product_pic
                         },
                         success: function (response) {
+                            
                             if(response.trim() == "success")
                             {
                                 if($(".cart-notification").prop("nodeName") != undefined)
@@ -64,7 +65,7 @@ function add_to_cart() {
                                 }
                             }
                             else{
-                                alert(alert);
+                                alert(response);
                             }
                         }
                     });
@@ -107,7 +108,7 @@ $(document).ready(function(){
 //buy products
 function buy_now(){
     $(document).ready(function (){
-        $(".buy-btn").each(function () {
+        $(".purchase-btn").each(function () {
             $(this).click(function (){
                 var product_id = $(this).attr("product-id");
                 window.location = "http://localhost/ecommerce-project/pages/php/buy_product.php?product-id="+product_id;
@@ -115,6 +116,7 @@ function buy_now(){
         });
     });
 }
+
 
 buy_now();
 
@@ -187,6 +189,10 @@ $(document).ready(function (){
 $(document).ready(function (){
     $(".category-btn").each(function (){
         $(this).click(function (){
+            $(".category-btn").each(function (){
+                $(this).removeClass("btn-primary px-2 rounded-sm");
+            });
+            $(this).addClass("btn-primary px-2 rounded-sm");
             var category_name = $(this).attr("category_name");
             var brand_name = $(this).attr("brand_name");
             $.ajax({
@@ -202,6 +208,7 @@ $(document).ready(function (){
                 success: function (response) {
                     $(".filter-result").html("");
                     var all_data = JSON.parse(response.trim());
+                    // console.log(all_data);
                     if(all_data.length == 0) {
                         $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
                     }
@@ -233,9 +240,9 @@ $(document).ready(function (){
                         $(cart_btn).attr("product-title",all_data[i].title);
                         $(cart_btn).attr("product-id",all_data[i].id);
                         $(cart_btn).attr("product-price",all_data[i].price);
-                        $(cart_btn).attr("product-pic",all_data[i].pic);
+                        $(cart_btn).attr("product-pic",all_data[i].thumb_pic);
                         $(cart_btn).attr("product-brand",all_data[i].brands);
-                        $(cart_btn).on("click",function(){
+                        $(cart_btn).click(function(){
                             add_to_cart();
                         });
                         //buy btn
@@ -245,7 +252,8 @@ $(document).ready(function (){
                         $(buy_btn).attr("product-title",all_data[i].title);
                         $(buy_btn).attr("product-id",all_data[i].id);
                         $(buy_btn).attr("product-price",all_data[i].price);
-                        $(buy_btn).attr("product-pic",all_data[i].pic);
+                        $(buy_btn).attr("product-pic",all_data[i].thumb_pic);
+                        $(buy_btn).attr("product-brand",all_data[i].brands);
                         $(buy_btn).on("click",function(){
                             buy_now();
 
@@ -265,6 +273,100 @@ $(document).ready(function (){
                 }
 
             });
+        });
+    });
+});
+
+//default btn
+$(document).ready(function(){
+    var category_btn = $(".category-btn");
+    // category_btn[0].click();
+});
+
+//filter by price
+$(document).ready(function(){
+    $(".price-filter-btn").click(function(){
+        var cat_name = $(this).attr("cat-name");
+        var min = $(".min-price").val();
+        var max = $(".max-price").val();
+        $.ajax({
+            type: "POST",
+            url: "filter_by_price.php",
+            data: {
+                min : min,
+                max : max,
+                cat_name : cat_name
+            },
+            beforeSend: function () {
+                $(".filter-result").html("processing.....");
+            },
+            success: function (response) {
+                $(".filter-result").html("");
+                var all_data = JSON.parse(response.trim());
+                // console.log(all_data);
+                if(all_data.length == 0) {
+                    $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
+                }
+                else{
+                var i;
+                for(i=0; i<all_data.length; i++){
+                    var div = document.createElement("div");
+                    div.className = "text-center border shadow-sm p-3 mb-4";
+                    var img = document.createElement("img");
+                    img.src = "../../"+all_data[i].thumb_pic;
+                    img.width = "250";
+                    img.height = "316";
+                    //brand
+                    var brand_span = document.createElement("span");
+                    brand_span.className = "text-uppercase font-weight-bold";
+                    brand_span.innerHTML = "<br>"+all_data[i].brands+"<br>";
+                    //title
+                    var title_span = document.createElement("span");
+                    title_span.className = "text-uppercase";
+                    title_span.innerHTML = all_data[i].title+"<br>";
+                    //price
+                    var price_span = document.createElement("span");
+                    price_span.className = "text-uppercase";
+                    price_span.innerHTML = "<i class='fa fa-rupee'></i>"+all_data[i].price+"<br>";
+                    //add to cart
+                    var cart_btn = document.createElement("btn");
+                    cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
+                    cart_btn.innerHTML = "ADD TO CART";
+                    $(cart_btn).attr("product-title",all_data[i].title);
+                    $(cart_btn).attr("product-id",all_data[i].id);
+                    $(cart_btn).attr("product-price",all_data[i].price);
+                    $(cart_btn).attr("product-pic",all_data[i].thumb_pic);
+                    $(cart_btn).attr("product-brand",all_data[i].brands);
+                    $(cart_btn).click(function(){
+                        add_to_cart();
+                    });
+                    //buy btn
+                    var buy_btn = document.createElement("btn");
+                    buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn";
+                    buy_btn.innerHTML = "BUY NOW";
+                    $(buy_btn).attr("product-title",all_data[i].title);
+                    $(buy_btn).attr("product-id",all_data[i].id);
+                    $(buy_btn).attr("product-price",all_data[i].price);
+                    $(buy_btn).attr("product-pic",all_data[i].thumb_pic);
+                    $(buy_btn).attr("product-brand",all_data[i].brands);
+                    $(buy_btn).on("click",function(){
+                        buy_now();
+
+                    });
+
+                    $(div).append(img);
+                    $(div).append(brand_span);
+                    $(div).append(title_span);
+                    $(div).append(price_span);
+                    $(div).append(cart_btn);
+                    $(div).append(buy_btn);
+                    $(".filter-result").append(div);
+                }
+                    // addto_cart();
+                    // buy_now();
+            }
+
+            }
         });
     });
 });

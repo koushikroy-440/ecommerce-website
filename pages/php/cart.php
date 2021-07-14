@@ -49,7 +49,7 @@
                 echo "success";
             }
             else{
-                echo"unable to store data in cart table";
+                echo "unable to store data in cart table";
             }
         }
         else{
