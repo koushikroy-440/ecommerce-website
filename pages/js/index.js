@@ -370,3 +370,87 @@ $(document).ready(function(){
         });
     });
 });
+
+//personal edit
+$(document).ready(function (){
+    $(".personal-form").on("submit", function (event){
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "personal_information.php",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            catch: false,
+            beforeSend: function () {
+                $(".personal-form button").html("please wait...");
+            }, 
+            success: function (response) {
+                $(".personal-form button").html("UPDATE");
+                alert(response);
+            }
+        });
+    });
+});
+//change Password
+$(document).ready(function(){
+    $(".privacy-form").on("submit", function (event) {
+        event.preventDefault();
+        var password = $("#new-password").val();
+        var re_password = $("#re-password").val();
+        if(password == re_password)
+        {
+            $.ajax({
+                type: "POST",
+                url: "change_password.php",
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                catch: false,
+                beforeSend: function () {
+                    $(".change_password_btn").html("please wait...");
+                }, 
+                success: function (response) {
+                    $(".change_password_btn").html("CHANGE PASSWORD");
+                    if(response.trim() == "password change successfully")
+                    {
+                        alert(response);
+                        $("..privacy-form").trigger("reset");
+                    }
+                    else{
+                        alert(response);
+                    }
+                }
+            });
+        }
+        else{
+            alert("password and re-password must be same")
+        }
+    });
+});
+
+//star rating
+$(document).ready(function(){
+    $(".star").each(function(){
+        $(this).click(function (){
+            var i;
+            var star = $(".star");
+            var index = $(this).attr("index");
+            index++;
+            for(i=0;i<5;i++)
+            {
+                $(star[i]).removeClass("fa-star text-warning");
+                $(star[i]).addClass("fa fa-star-o text-warning");
+                if(i<index)
+                {
+                    $(star[i]).removeClass("fa fa-star-o");
+                    $(star[i]).addClass("fa fa-star text-warning");
+                    // alert();
+                }
+            }
+            
+        });
+       
+        
+    });
+});

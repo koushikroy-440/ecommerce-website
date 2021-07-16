@@ -32,7 +32,7 @@ $username = base64_decode($_COOKIE['_au_']);
     ?>
     <div class="container" style="margin-top: 80px; margin-bottom:40px;">
       <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-8">
               <ul class="nav nav-tabs">
                   <li class="nav-item">
                       <a href="#personal" class="nav-link active" data-toggle="tab">
@@ -67,7 +67,7 @@ $username = base64_decode($_COOKIE['_au_']);
                             if($response)
                             {
                                 $data = $response->fetch_assoc();
-                                echo $data['email'];
+                                
                                 $first_name = $data['firstname'];
                                 $last_name = $data['lastname'];
                                 $email = $data['email'];
@@ -120,10 +120,76 @@ $username = base64_decode($_COOKIE['_au_']);
                             </form>
                         </div>
                   </div>
-                  <div class="tab-pane fade" id="privacy"></div>
-                  <div class="tab-pane fade" id="purchase"></div>
-
-
+                  <div class="tab-pane fade" id="privacy">
+                  <div class="jumbotron py-3 my-4 bg-white shadow-sm border-top border-bottom" style="border-left: 5px solid blue">
+                      <form class="privacy-form">
+                          <div class="form-group">
+                              <span for="old-password">OLD PASSWORD</span>
+                              <input type="password" id="old-password" name="old-password" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                              <span for="new-password">NEW PASSWORD</span>
+                              <input type="password" id="new-password" name="new-password" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                              <span for="re-password">RE-ENTER PASSWORD</span>
+                              <input type="password" id="re-password" name="re-password" class="form-control" required>
+                          </div>
+                          <button type="submit" class="btn btn-primary change_password_btn">CHANGE PASSWORD</button>
+                      </form>
+                  </div>
+                  </div>
+                  <div class="tab-pane fade" id="purchase">
+                      <?php
+                      $get_data = "SELECT * FROM purchase WHERE email = '$username'";
+                      $response = $db->query($get_data);
+                      if($response->num_rows != 0)
+                      {
+                        while($data = $response->fetch_assoc())
+                        {
+                            $title = $data['title'];
+                            $product_id = $data['product_id'];
+                            $price = $data['price'];
+                            $qnt = $data['quantity'];
+                            $payment_mode = $data['payment_mode'];
+                            $status = $data['status'];
+                            $date = date_create($data['purchase_date']);
+                            $purchase_date = date_format($date,'d-m-y');
+                            $photo = "";
+                            //get photo
+                            $get_data = "SELECT * FROM products WHERE id='$product_id'";
+                            $response = $db->query($get_data);
+                            if($response)
+                            {
+                                $data = $response->fetch_assoc();
+                                $photo = $data['thumb_pic'];
+                            }
+                            echo "<div class='media border rounded bg-white shadow-sm my-4 p-4'>";
+                            echo "<img class='mr-3' src='../../".$photo."' width='80px'>";
+                            echo "<div class='media-body'>";
+                            echo "<h4 class='text-uppercase'>".$title."</h4>";
+                            echo "<p class='p-0 m-0'><i class='fa fa-rupee'></i> ".$price."</p>";
+                            echo "<p class='p-0 m-0'>Quantity : ".$qnt."</p>";
+                            echo "<p class='p-0 m-0'>payment mode :".$payment_mode."</p>";
+                            echo "<p class='p-0 m-0'>Status : ".$status."</p>";
+                            echo "<p class='p-0 m-0'>Purchase date : ".$purchase_date."</p>";
+                            if($status == "delivered")
+                            {
+                                echo "<h4 class='mt-2'>PLEASE RATE THE PRODUCT</h4>";
+                                for($i=0;$i<5;$i++){
+                                    echo"<i class='fa fa-star-o text-warning star' index='".$i."' style='font-size:25px;margin-right:5px'></i>";
+                                }
+                                echo "<button class='my-3 btn btn-primary start-btn d-none'>POST</button>";
+                            }
+                            echo "</div>";
+                            echo "</div>";
+                        }
+                      }
+                      else{
+                          echo"no purchase";
+                      }
+                      ?>
+                  </div>
               </div>
           </div>
       </div>
