@@ -156,6 +156,8 @@ $username = base64_decode($_COOKIE['_au_']);
                             $date = date_create($data['purchase_date']);
                             $purchase_date = date_format($date,'d-m-y');
                             $photo = "";
+                            $rating = $data['ratings'];
+                            $comment = $data['comment'];
                             //get photo
                             $get_data = "SELECT * FROM products WHERE id='$product_id'";
                             $response = $db->query($get_data);
@@ -175,11 +177,39 @@ $username = base64_decode($_COOKIE['_au_']);
                             echo "<p class='p-0 m-0'>Purchase date : ".$purchase_date."</p>";
                             if($status == "delivered")
                             {
-                                echo "<h4 class='mt-2'>PLEASE RATE THE PRODUCT</h4>";
-                                for($i=0;$i<5;$i++){
-                                    echo"<i class='fa fa-star-o text-warning star' index='".$i."' style='font-size:25px;margin-right:5px'></i>";
-                                }
-                                echo "<button class='my-3 btn btn-primary start-btn d-none'>POST</button>";
+                                if($rating == 0)
+                                {
+                                        echo "<h4 class='mt-2 comment-header'>PLEASE RATE THE PRODUCT</h4>";
+                                    for($i=0;$i<5;$i++){
+                                        echo"<i class='fa fa-star-o text-warning star' index='".$i."' style='font-size:25px;margin-right:5px'></i>";
+                                    }
+                                    echo "<div class='comment-box'>
+                                    <label for='comment'>Comment</label>
+                                    <textarea id='comment' name='comment' class='form-control ' maxlength='100'></textarea>
+                                    </div>";
+                                    echo "<div class='picture-box'>
+                                    <label for='picture'>Picture</label>
+                                    <input id='picture' name='picture' type='file' accept='image/*' class='form-control image-box'>
+                                    </div>";
+                                    echo "<p class='comment-info'></p>";
+                                    echo "<br><button class=' btn btn-primary star-btn d-none' product-id='".$product_id."'>POST</button>";
+
+                                }  
+                                else{
+                                    echo "<h4 class='mt-2'>YOUR RATING</h4>";
+                                    for($i=0;$i<$rating;$i++)
+                                    {
+                                        echo"<i class='fa fa-star text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                                        
+                                    }
+                                    $rest_star = 5-$rating;
+                                    for($i=0;$i<$rest_star;$i++)
+                                    {
+                                        echo"<i class='fa fa-star-0 text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                                    }
+                                  echo "<p>".$comment."</p>";
+
+                                } 
                             }
                             echo "</div>";
                             echo "</div>";

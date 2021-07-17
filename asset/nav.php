@@ -32,7 +32,7 @@
             $_SESSION['pincode'] = $data['pincode'];
 
         }
-        $menu = '<a href="profile.php" class="dropdown-item">'.$name.'</a>
+        $menu = '<a href="http://localhost/ecommerce-project/pages/php/profile.php" class="dropdown-item">'.$name.'</a>
         <a href="pages/php/sign_out.php" class="dropdown-item"><i class="fa fa-sign-out"></i>Sign Out</a>'
         ;
         $get_cart = "SELECT count(id) AS result FROM cart WHERE username =  '$email' ";

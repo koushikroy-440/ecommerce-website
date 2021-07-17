@@ -55,7 +55,7 @@ $cat_name = $_GET["cat_name"];
                     ?>
                     </div>
                     <h5>Filter By Price</h5>
-                    <div class="btn-group bg-light border shadow-sm">
+                    <div class="btn-group bg-light border shadow-sm mb-3">
                         <button class="btn">
                             <input type="number" placeholder="minimum price" class="form-control min-price">
                         </button>
@@ -64,7 +64,13 @@ $cat_name = $_GET["cat_name"];
                         </button>
                         <button class="btn price-filter-btn" cat-name = "<?php echo $cat_name?>">Get products</button>
                     </div>
-
+                    <h4>Sort by</h4>
+                    <select class="form-control sort-by">
+                        <option value="recommended">recommended</option>
+                        <option value="high">high to low</option>
+                        <option value="low">Low to high</option>
+                        <option value="new">Newest</option>
+                    </select>
                 </div>
             </div>
             <div class="col-md-9">

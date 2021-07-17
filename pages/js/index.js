@@ -108,7 +108,7 @@ $(document).ready(function(){
 //buy products
 function buy_now(){
     $(document).ready(function (){
-        $(".purchase-btn").each(function () {
+        $(".buy-btn").each(function () {
             $(this).click(function (){
                 var product_id = $(this).attr("product-id");
                 window.location = "http://localhost/ecommerce-project/pages/php/buy_product.php?product-id="+product_id;
@@ -136,7 +136,7 @@ $(document).ready(function (){
                 // alert();
             }
             else{
-                window.location = "../../pay/purchase.php?id="+id+"&price="+price+"&brand="+brand+"&title="+title+"&qnt="+qnt+"&mode=cod";
+                window.location = "../../pay/purchase.php?id="+id+"&price="+price+"&brand="+brand+"&title="+title+"&quantity="+qnt+"&mode=cod";
             }
         }
         else{
@@ -342,7 +342,7 @@ $(document).ready(function(){
                     });
                     //buy btn
                     var buy_btn = document.createElement("btn");
-                    buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn";
+                    buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn buy-btn";
                     buy_btn.innerHTML = "BUY NOW";
                     $(buy_btn).attr("product-title",all_data[i].title);
                     $(buy_btn).attr("product-id",all_data[i].id);
@@ -384,6 +384,7 @@ $(document).ready(function (){
             catch: false,
             beforeSend: function () {
                 $(".personal-form button").html("please wait...");
+                // console.log(new FormData(this));
             }, 
             success: function (response) {
                 $(".personal-form button").html("UPDATE");
@@ -433,6 +434,7 @@ $(document).ready(function(){
 $(document).ready(function(){
     $(".star").each(function(){
         $(this).click(function (){
+            $(".star-btn").removeClass("d-none");
             var i;
             var star = $(".star");
             var index = $(this).attr("index");
@@ -448,9 +450,151 @@ $(document).ready(function(){
                     // alert();
                 }
             }
+
+            $(".star-btn").click(function(){
+                var product_id = $(this).attr("product-id");
+                if($("#comment").val() != "")
+                {
+                    if($("#picture").val() != "")
+                    {
+                        var picture = document.querySelector("#picture").files[0];
+                        var form = new FormData();
+                        form.append("photo",picture);
+                        form.append("comment",$("#comment").val());
+                        form.append("product_id",product_id);
+                        form.append("rating",index);
+
+                        $.ajax({
+                            type: "POST",
+                            url:"star.php",
+                            data: form,
+                            contentType: false,
+                            processData: false,
+                            catch: false,
+                            success: function (response) {
+                                if(response.trim() == "success")
+                                {
+                                    $(".star-btn").addClass("d-none");
+                                    $(".comment-info").html("comment post");
+                                    $(".comment-info").addClass("text-success");
+                                    $(".comment-box").addClass("d-none");
+                                    $(".picture-box").addClass("d-none");
+                                    $(".comment-header").html("your rating");
+                                    setTimeout(function(){
+                                        $(".comment-info").html($("#comment").val());
+                                        $("comment-info").removeClass("text-success");
+                                    },2000);
+
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        alert("please upload a picture");
+                    }
+                }
+                else{
+                    alert("comment box is empty");
+                }
+               
+            });
             
         });
-       
-        
     });
 });
+
+//sort by
+$(document).ready(function (){
+    $(".sort-by").on("change", function (){
+        var brand = "";
+        var category = "";
+        $(".category-btn").each(function (){
+           
+            if($(this).attr("class").indexOf("btn-primary") != -1)
+            {
+                    brand = $(this).attr("brand_name");
+                    category = $(this).attr("category_name");
+            }
+        });
+        var sort_by = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "sort_product.php",
+            data: {
+                brand: brand,
+                category: category,
+                sort_by : sort_by
+            },
+            beforeSend: function () {
+                $(".filter-result").html("processing.....");
+            },
+            success: function (response) {
+                $(".filter-result").html("");
+                var all_data = JSON.parse(response.trim());
+                // console.log(all_data);
+                if(all_data.length == 0) {
+                    $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
+                }
+                else{
+                var i;
+                for(i=0; i<all_data.length; i++){
+                    var div = document.createElement("div");
+                    div.className = "text-center border shadow-sm p-3 mb-4";
+                    var img = document.createElement("img");
+                    img.src = "../../"+all_data[i].thumb_pic;
+                    img.width = "250";
+                    img.height = "316";
+                    //brand
+                    var brand_span = document.createElement("span");
+                    brand_span.className = "text-uppercase font-weight-bold";
+                    brand_span.innerHTML = "<br>"+all_data[i].brands+"<br>";
+                    //title
+                    var title_span = document.createElement("span");
+                    title_span.className = "text-uppercase";
+                    title_span.innerHTML = all_data[i].title+"<br>";
+                    //price
+                    var price_span = document.createElement("span");
+                    price_span.className = "text-uppercase";
+                    price_span.innerHTML = "<i class='fa fa-rupee'></i>"+all_data[i].price+"<br>";
+                    //add to cart
+                    var cart_btn = document.createElement("btn");
+                    cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
+                    cart_btn.innerHTML = "ADD TO CART";
+                    $(cart_btn).attr("product-title",all_data[i].title);
+                    $(cart_btn).attr("product-id",all_data[i].id);
+                    $(cart_btn).attr("product-price",all_data[i].price);
+                    $(cart_btn).attr("product-pic",all_data[i].thumb_pic);
+                    $(cart_btn).attr("product-brand",all_data[i].brands);
+                    $(cart_btn).click(function(){
+                        add_to_cart();
+                    });
+                    //buy btn
+                    var buy_btn = document.createElement("btn");
+                    buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn buy-btn";
+                    buy_btn.innerHTML = "BUY NOW";
+                    $(buy_btn).attr("product-title",all_data[i].title);
+                    $(buy_btn).attr("product-id",all_data[i].id);
+                    $(buy_btn).attr("product-price",all_data[i].price);
+                    $(buy_btn).attr("product-pic",all_data[i].thumb_pic);
+                    $(buy_btn).attr("product-brand",all_data[i].brands);
+                    $(buy_btn).on("click",function(){
+                        buy_now();
+
+                    });
+
+                    $(div).append(img);
+                    $(div).append(brand_span);
+                    $(div).append(title_span);
+                    $(div).append(price_span);
+                    $(div).append(cart_btn);
+                    $(div).append(buy_btn);
+                    $(".filter-result").append(div);
+                }
+                    // addto_cart();
+                    // buy_now();
+            }
+            }
+        });
+    });
+});
+

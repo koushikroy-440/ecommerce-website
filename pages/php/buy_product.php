@@ -139,7 +139,46 @@ if ($query->num_rows != 0) {
                 <p class="pincode-message mt-2"></p>
 
             </div>
+            <div class="col-md-12 bg-white mt-1 p-4">
+                <h4>product review</h4>
+                <?php
+                    $get_data = "SELECT * FROM purchase WHERE product_id = '$id' WHERE rating <> 0";
+                    $response = $db->query($get_data);
+                    if($response)
+                    {
+                        while($data = $response->fetch_assoc())
+                        {
+                            $src = "data:images/png;base64,".base64_encode($data['picture']);
+                            $full_name = $data['fullname'];
+                            $rating = $data['ratings'];
+                            $comment = $data['comment'];
+                            echo "<div class='media mb-4'>";
+                            echo "<img src='".$src."' width='80' height='80' style='border:2px solid green' class='rounded-circle'>";
+                            echo "<div class='media-body ml-4'>";
+                            echo "<p class='p-0 m-0'>".$full_name."</p>";
+                            for($i=0;$i<$rating;$i++)
+                                    {
+                                        echo"<i class='fa fa-star text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                                        
+                                    }
+                                    $rest_star = 5-$rating;
+                                    for($i=0;$i<$rest_star;$i++)
+                                    {
+                                        echo"<i class='fa fa-star-0 text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                                    }
+                                  echo "<p>".$comment."</p>";
+                            echo "</div>";
+                            echo "</div>";
+
+
+                        }
+                    }
+
+                ?>
+            </div>
+            
         </div>
+
     </div>
     <?php
     include_once("../../asset/footer.php");

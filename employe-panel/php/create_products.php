@@ -9,6 +9,7 @@ $product_description = $_POST['product-description'];
 
 $brands = $_POST['brands'];
 $message = "";
+$date = date("Y-m-d");
 //get category name
 $get_cat_name = "SELECT category_name FROM brands WHERE brands = '$brands'";
 $response = $db->query($get_cat_name);
@@ -36,8 +37,8 @@ if ($check_dir) {
 }
 
 if ($response) {
-    $store_data = "INSERT INTO products(category_name,title,brands,description,price,quantity)
-        VALUES('$c_name','$product_title','$brands','$product_description','$price','$quantity');
+    $store_data = "INSERT INTO products(category_name,title,brands,description,price,quantity,entry_date)
+        VALUES('$c_name','$product_title','$brands','$product_description','$price','$quantity','$date');
         ";
     $response = $db->query($store_data);
     if ($response) {
@@ -79,16 +80,16 @@ if ($response) {
                 thumb_pic VARCHAR(100) NULL,
                 front_pic VARCHAR(100) NULL,
                 back_pic VARCHAR(100) NULL,
-               
                 left_pic VARCHAR(100),
                 right_pic VARCHAR(100) NULL,
+                entry_date DATE NULL,
                 PRIMARY KEY (id)
             )";
 
     $response = $db->query($create_table);
     if ($response) {
-        $store_data = "INSERT INTO products(category_name,title,brands,description,price,quantity)
-                VALUES('$c_name','$product_title','$brands','$product_description','$price','$quantity');
+        $store_data = "INSERT INTO products(category_name,title,brands,description,price,quantity,entry_date)
+                VALUES('$c_name','$product_title','$brands','$product_description','$price','$quantity','$date');
                 ";
         $response = $db->query($store_data);
         if ($response) {

@@ -5,6 +5,7 @@
     $brand = $_GET['brand'];
     $title = $_GET['title'];
     $quantity = $_GET['quantity'];
+    // echo $quantity;
     $full_name = "";
     $phone = "";
     $username = base64_decode($_COOKIE['_au_']);
@@ -18,12 +19,12 @@
     $stock = "";
     $message = "";
     //get stocks 
-    $get_stocks = "SELECT quantity FROM purchase WHERE id = '$id' AND brands = '$brand'";
+    $get_stocks = "SELECT quantity FROM products WHERE id = '$id' AND brands = '$brand'";
     $response = $db->query($get_stocks);
     if($response)
     {
         $data = $response->fetch_assoc();
-        $stock = $data['quantity'] - 1;
+        $stock = $data['quantity'] - $quantity;
 
     }
     $get_data = "SELECT * FROM users WHERE  email = '$username'";
@@ -34,11 +35,13 @@
         $state = $data['state'];
         $country = $data['country'];
         $pin_code = $data['pincode'];
+        $full_name = $data['firstname'] + $data['lastname'];
+        $phone = $data['mobile'];
         $purchase_entry = "SELECT * FROM purchase";
         $response = $db->query($purchase_entry);
         if($response){
             $insert_data = "INSERT INTO purchase (product_id,title,quantity,brand,price,fullname,email,phone,address,country,pincode,state,purchase_date,purchase_time,payment_mode)
-                VALUES('$id','$title','$quantity','$brand','$price','$full_name','$email','$phone','$address','$country','$pin_code','$state','$date','$time','$mode');
+                VALUES('$id','$title','$quantity','$brand','$price','$full_name','$username','$phone','$address','$country','$pin_code','$state','$date','$time','$mode');
                 ";
                 $response = $db->query($insert_data);
                 if($response){
@@ -82,6 +85,9 @@
                 payment_mode VARCHAR(50),
                 purchase_date DATE,
                 purchase_time TIME,
+                ratings INT(6) DEFAULT 0,
+                comment MEDIUMTEXT NULL,
+                picture MEDIUMBLOB,
                 status VARCHAR(50) DEFAULT 'processing',
                 PRIMARY KEY(id)
             )";
@@ -142,7 +148,6 @@
   <body class="bg-light">
       
       <?php
-            
              include_once("../asset/nav.php");
              $full_name = $_SESSION['name'];
              $phone = $_SESSION['mobile'];
