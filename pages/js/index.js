@@ -1,25 +1,23 @@
 //add to cart
 function add_to_cart() {
-    $(document).ready(function(){
-        $(".cart-btn").each(function(){
-            $(this).click(function(){
+    $(document).ready(function () {
+        $(".cart-btn").each(function () {
+            $(this).click(function () {
                 var product_id = $(this).attr("product-id");
                 var all_cookie = document.cookie.split(";");
                 var temp_cookie = [];
                 var i;
-                for(i=0;i<all_cookie.length;i++){
+                for (i = 0; i < all_cookie.length; i++) {
                     var cookie = all_cookie[i].split("=");
-                    if(cookie[0].trim() != "_au_")
-                    {
+                    if (cookie[0].trim() != "_au_") {
                         temp_cookie[i] = cookie[0].trim();
                     }
-                    else{
-    
+                    else {
+
                         temp_cookie = "matched";
                     }
                 }
-                if(temp_cookie == "matched")
-                {
+                if (temp_cookie == "matched") {
                     var product_id = $(this).attr("product-id");
                     var product_brand = $(this).attr("product-brand");
                     var product_title = $(this).attr("product-title");
@@ -36,16 +34,14 @@ function add_to_cart() {
                             product_pic: product_pic
                         },
                         success: function (response) {
-                            
-                            if(response.trim() == "success")
-                            {
-                                if($(".cart-notification").prop("nodeName") != undefined)
-                                {
-                                   var no = Number($(".cart-notification").html().trim());
-                                   no++;
-                                   $(".cart-notification").html(no);
+
+                            if (response.trim() == "success") {
+                                if ($(".cart-notification").prop("nodeName") != undefined) {
+                                    var no = Number($(".cart-notification").html().trim());
+                                    no++;
+                                    $(".cart-notification").html(no);
                                 }
-                                else{
+                                else {
                                     var div = document.createElement("div");
                                     div.style.backgroundColor = "red";
                                     div.style.color = "white";
@@ -64,14 +60,14 @@ function add_to_cart() {
                                     $(".cart-link").append(div);
                                 }
                             }
-                            else{
+                            else {
                                 alert(response);
                             }
                         }
                     });
-    
+
                 }
-                else{
+                else {
                     window.location = "signin.php";
                 }
             });
@@ -81,20 +77,19 @@ function add_to_cart() {
 add_to_cart();
 
 //delete from cart
-$(document).ready(function(){
-    $(".delete-btn").each(function(){
-        $(this).click(function(){
+$(document).ready(function () {
+    $(".delete-btn").each(function () {
+        $(this).click(function () {
             var id = $(this).attr("product-id");
             var btn = this;
             $.ajax({
                 type: "POST",
                 url: "../php/delete_cart.php",
                 data: {
-                    id:id,
+                    id: id,
                 },
-                success: function(response){
-                    if(response.trim() == "success")
-                    {
+                success: function (response) {
+                    if (response.trim() == "success") {
 
                         var div = btn.parentElement.parentElement.parentElement;
                         div.remove();
@@ -106,12 +101,12 @@ $(document).ready(function(){
 });
 
 //buy products
-function buy_now(){
-    $(document).ready(function (){
+function buy_now() {
+    $(document).ready(function () {
         $(".buy-btn").each(function () {
-            $(this).click(function (){
+            $(this).click(function () {
                 var product_id = $(this).attr("product-id");
-                window.location = "http://localhost/ecommerce-project/pages/php/buy_product.php?product-id="+product_id;
+                window.location = "http://localhost/ecommerce-project/pages/php/buy_product.php?product-id=" + product_id;
             });
         });
     });
@@ -121,32 +116,31 @@ function buy_now(){
 buy_now();
 
 //purchase product
-$(document).ready(function (){
-    $(".purchase-btn").click(function (){
+$(document).ready(function () {
+    $(".purchase-btn").click(function () {
         var pay_mode = $("input[name = 'pay-mode']:checked").val();
-        if(pay_mode)
-        {   var id = $(this).attr("product-id");
+        if (pay_mode) {
+            var id = $(this).attr("product-id");
             var price = $(this).attr("product-price");
             var brand = $(this).attr("product-brand");
             var title = $(this).attr("product-title");
             var qnt = $(".quantity").val();
-            if(pay_mode == "online")
-            {
-                window.location = "../../pay/pay.php?id="+id+"&price="+price+"&brand="+brand+"&title="+title+"&qnt="+qnt;
+            if (pay_mode == "online") {
+                window.location = "../../pay/pay.php?id=" + id + "&price=" + price + "&brand=" + brand + "&title=" + title + "&qnt=" + qnt;
                 // alert();
             }
-            else{
-                window.location = "../../pay/purchase.php?id="+id+"&price="+price+"&brand="+brand+"&title="+title+"&quantity="+qnt+"&mode=cod";
+            else {
+                window.location = "../../pay/purchase.php?id=" + id + "&price=" + price + "&brand=" + brand + "&title=" + title + "&quantity=" + qnt + "&mode=cod";
             }
         }
-        else{
+        else {
             alert("please chose a payment option");
         }
     });
 });
 //check pinCode
-$(document).ready(function(){
-    $(".pincode-btn").click(function(){
+$(document).ready(function () {
+    $(".pincode-btn").click(function () {
         var pin = $(".pin-input").val();
         $.ajax({
             type: "POST",
@@ -162,10 +156,10 @@ $(document).ready(function(){
 });
 
 //stocks 
-$(document).ready(function (){
-    $(".quantity").on("input",function () {
+$(document).ready(function () {
+    $(".quantity").on("input", function () {
         var stocks = $(".stocks").html();
-        if($(this).val() > stocks){
+        if ($(this).val() > stocks) {
             alert("negative stocks");
             $(this).val('1');
         }
@@ -173,11 +167,11 @@ $(document).ready(function (){
 });
 
 //preview picture
-$(document).ready(function (){
+$(document).ready(function () {
     $(".thumb-pic").each(function () {
-        $(this).click(function (){
+        $(this).click(function () {
             var src = $(this).attr("src");
-            $(".preview").attr("src",src);
+            $(".preview").attr("src", src);
             $(".preview").addClass("animated ZoomIn");
 
         });
@@ -186,10 +180,10 @@ $(document).ready(function (){
 });
 
 //show category
-$(document).ready(function (){
-    $(".category-btn").each(function (){
-        $(this).click(function (){
-            $(".category-btn").each(function (){
+$(document).ready(function () {
+    $(".category-btn").each(function () {
+        $(this).click(function () {
+            $(".category-btn").each(function () {
                 $(this).removeClass("btn-primary px-2 rounded-sm");
             });
             $(this).addClass("btn-primary px-2 rounded-sm");
@@ -198,9 +192,9 @@ $(document).ready(function (){
             $.ajax({
                 type: "POST",
                 url: "filter_product.php",
-                data:{
-                        cat_name : category_name,
-                        brand_name : brand_name
+                data: {
+                    cat_name: category_name,
+                    brand_name: brand_name
                 },
                 beforeSend: function () {
                     $(".filter-result").html("processing...");
@@ -209,52 +203,147 @@ $(document).ready(function (){
                     $(".filter-result").html("");
                     var all_data = JSON.parse(response.trim());
                     // console.log(all_data);
-                    if(all_data.length == 0) {
+                    if (all_data.length == 0) {
                         $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
                     }
-                    else{
+                    else {
+                        var i;
+                        for (i = 0; i < all_data.length; i++) {
+                            var div = document.createElement("div");
+                            div.className = "text-center border shadow-sm p-3 mb-4";
+                            var img = document.createElement("img");
+                            img.src = "../../" + all_data[i].thumb_pic;
+                            img.width = "250";
+                            img.height = "316";
+                            //brand
+                            var brand_span = document.createElement("span");
+                            brand_span.className = "text-uppercase font-weight-bold";
+                            brand_span.innerHTML = "<br>" + all_data[i].brands + "<br>";
+                            //title
+                            var title_span = document.createElement("span");
+                            title_span.className = "text-uppercase";
+                            title_span.innerHTML = all_data[i].title + "<br>";
+                            //price
+                            var price_span = document.createElement("span");
+                            price_span.className = "text-uppercase";
+                            price_span.innerHTML = "<i class='fa fa-rupee'></i>" + all_data[i].price + "<br>";
+                            //add to cart
+                            var cart_btn = document.createElement("btn");
+                            cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
+                            cart_btn.innerHTML = "ADD TO CART";
+                            $(cart_btn).attr("product-title", all_data[i].title);
+                            $(cart_btn).attr("product-id", all_data[i].id);
+                            $(cart_btn).attr("product-price", all_data[i].price);
+                            $(cart_btn).attr("product-pic", all_data[i].thumb_pic);
+                            $(cart_btn).attr("product-brand", all_data[i].brands);
+                            $(cart_btn).click(function () {
+                                add_to_cart();
+                            });
+                            //buy btn
+                            var buy_btn = document.createElement("btn");
+                            buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn";
+                            buy_btn.innerHTML = "BUY NOW";
+                            $(buy_btn).attr("product-title", all_data[i].title);
+                            $(buy_btn).attr("product-id", all_data[i].id);
+                            $(buy_btn).attr("product-price", all_data[i].price);
+                            $(buy_btn).attr("product-pic", all_data[i].thumb_pic);
+                            $(buy_btn).attr("product-brand", all_data[i].brands);
+                            $(buy_btn).on("click", function () {
+                                buy_now();
+
+                            });
+
+                            $(div).append(img);
+                            $(div).append(brand_span);
+                            $(div).append(title_span);
+                            $(div).append(price_span);
+                            $(div).append(cart_btn);
+                            $(div).append(buy_btn);
+                            $(".filter-result").append(div);
+                        }
+                        // addto_cart();
+                        // buy_now();
+                    }
+                }
+
+            });
+        });
+    });
+});
+
+//default btn
+$(document).ready(function () {
+    var category_btn = $(".category-btn");
+    // category_btn[0].click();
+});
+
+//filter by price
+$(document).ready(function () {
+    $(".price-filter-btn").click(function () {
+        var cat_name = $(this).attr("cat-name");
+        var min = $(".min-price").val();
+        var max = $(".max-price").val();
+        $.ajax({
+            type: "POST",
+            url: "filter_by_price.php",
+            data: {
+                min: min,
+                max: max,
+                cat_name: cat_name
+            },
+            beforeSend: function () {
+                $(".filter-result").html("processing.....");
+            },
+            success: function (response) {
+                $(".filter-result").html("");
+                var all_data = JSON.parse(response.trim());
+                // console.log(all_data);
+                if (all_data.length == 0) {
+                    $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
+                }
+                else {
                     var i;
-                    for(i=0; i<all_data.length; i++){
+                    for (i = 0; i < all_data.length; i++) {
                         var div = document.createElement("div");
                         div.className = "text-center border shadow-sm p-3 mb-4";
                         var img = document.createElement("img");
-                        img.src = "../../"+all_data[i].thumb_pic;
+                        img.src = "../../" + all_data[i].thumb_pic;
                         img.width = "250";
                         img.height = "316";
                         //brand
                         var brand_span = document.createElement("span");
                         brand_span.className = "text-uppercase font-weight-bold";
-                        brand_span.innerHTML = "<br>"+all_data[i].brands+"<br>";
+                        brand_span.innerHTML = "<br>" + all_data[i].brands + "<br>";
                         //title
                         var title_span = document.createElement("span");
                         title_span.className = "text-uppercase";
-                        title_span.innerHTML = all_data[i].title+"<br>";
+                        title_span.innerHTML = all_data[i].title + "<br>";
                         //price
                         var price_span = document.createElement("span");
                         price_span.className = "text-uppercase";
-                        price_span.innerHTML = "<i class='fa fa-rupee'></i>"+all_data[i].price+"<br>";
+                        price_span.innerHTML = "<i class='fa fa-rupee'></i>" + all_data[i].price + "<br>";
                         //add to cart
                         var cart_btn = document.createElement("btn");
                         cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
                         cart_btn.innerHTML = "ADD TO CART";
-                        $(cart_btn).attr("product-title",all_data[i].title);
-                        $(cart_btn).attr("product-id",all_data[i].id);
-                        $(cart_btn).attr("product-price",all_data[i].price);
-                        $(cart_btn).attr("product-pic",all_data[i].thumb_pic);
-                        $(cart_btn).attr("product-brand",all_data[i].brands);
-                        $(cart_btn).click(function(){
+                        $(cart_btn).attr("product-title", all_data[i].title);
+                        $(cart_btn).attr("product-id", all_data[i].id);
+                        $(cart_btn).attr("product-price", all_data[i].price);
+                        $(cart_btn).attr("product-pic", all_data[i].thumb_pic);
+                        $(cart_btn).attr("product-brand", all_data[i].brands);
+                        $(cart_btn).click(function () {
                             add_to_cart();
                         });
                         //buy btn
                         var buy_btn = document.createElement("btn");
-                        buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn";
+                        buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn buy-btn";
                         buy_btn.innerHTML = "BUY NOW";
-                        $(buy_btn).attr("product-title",all_data[i].title);
-                        $(buy_btn).attr("product-id",all_data[i].id);
-                        $(buy_btn).attr("product-price",all_data[i].price);
-                        $(buy_btn).attr("product-pic",all_data[i].thumb_pic);
-                        $(buy_btn).attr("product-brand",all_data[i].brands);
-                        $(buy_btn).on("click",function(){
+                        $(buy_btn).attr("product-title", all_data[i].title);
+                        $(buy_btn).attr("product-id", all_data[i].id);
+                        $(buy_btn).attr("product-price", all_data[i].price);
+                        $(buy_btn).attr("product-pic", all_data[i].thumb_pic);
+                        $(buy_btn).attr("product-brand", all_data[i].brands);
+                        $(buy_btn).on("click", function () {
                             buy_now();
 
                         });
@@ -267,104 +356,9 @@ $(document).ready(function (){
                         $(div).append(buy_btn);
                         $(".filter-result").append(div);
                     }
-                        // addto_cart();
-                        // buy_now();
-                }
-                }
-
-            });
-        });
-    });
-});
-
-//default btn
-$(document).ready(function(){
-    var category_btn = $(".category-btn");
-    // category_btn[0].click();
-});
-
-//filter by price
-$(document).ready(function(){
-    $(".price-filter-btn").click(function(){
-        var cat_name = $(this).attr("cat-name");
-        var min = $(".min-price").val();
-        var max = $(".max-price").val();
-        $.ajax({
-            type: "POST",
-            url: "filter_by_price.php",
-            data: {
-                min : min,
-                max : max,
-                cat_name : cat_name
-            },
-            beforeSend: function () {
-                $(".filter-result").html("processing.....");
-            },
-            success: function (response) {
-                $(".filter-result").html("");
-                var all_data = JSON.parse(response.trim());
-                // console.log(all_data);
-                if(all_data.length == 0) {
-                    $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
-                }
-                else{
-                var i;
-                for(i=0; i<all_data.length; i++){
-                    var div = document.createElement("div");
-                    div.className = "text-center border shadow-sm p-3 mb-4";
-                    var img = document.createElement("img");
-                    img.src = "../../"+all_data[i].thumb_pic;
-                    img.width = "250";
-                    img.height = "316";
-                    //brand
-                    var brand_span = document.createElement("span");
-                    brand_span.className = "text-uppercase font-weight-bold";
-                    brand_span.innerHTML = "<br>"+all_data[i].brands+"<br>";
-                    //title
-                    var title_span = document.createElement("span");
-                    title_span.className = "text-uppercase";
-                    title_span.innerHTML = all_data[i].title+"<br>";
-                    //price
-                    var price_span = document.createElement("span");
-                    price_span.className = "text-uppercase";
-                    price_span.innerHTML = "<i class='fa fa-rupee'></i>"+all_data[i].price+"<br>";
-                    //add to cart
-                    var cart_btn = document.createElement("btn");
-                    cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
-                    cart_btn.innerHTML = "ADD TO CART";
-                    $(cart_btn).attr("product-title",all_data[i].title);
-                    $(cart_btn).attr("product-id",all_data[i].id);
-                    $(cart_btn).attr("product-price",all_data[i].price);
-                    $(cart_btn).attr("product-pic",all_data[i].thumb_pic);
-                    $(cart_btn).attr("product-brand",all_data[i].brands);
-                    $(cart_btn).click(function(){
-                        add_to_cart();
-                    });
-                    //buy btn
-                    var buy_btn = document.createElement("btn");
-                    buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn buy-btn";
-                    buy_btn.innerHTML = "BUY NOW";
-                    $(buy_btn).attr("product-title",all_data[i].title);
-                    $(buy_btn).attr("product-id",all_data[i].id);
-                    $(buy_btn).attr("product-price",all_data[i].price);
-                    $(buy_btn).attr("product-pic",all_data[i].thumb_pic);
-                    $(buy_btn).attr("product-brand",all_data[i].brands);
-                    $(buy_btn).on("click",function(){
-                        buy_now();
-
-                    });
-
-                    $(div).append(img);
-                    $(div).append(brand_span);
-                    $(div).append(title_span);
-                    $(div).append(price_span);
-                    $(div).append(cart_btn);
-                    $(div).append(buy_btn);
-                    $(".filter-result").append(div);
-                }
                     // addto_cart();
                     // buy_now();
-            }
+                }
 
             }
         });
@@ -372,8 +366,8 @@ $(document).ready(function(){
 });
 
 //personal edit
-$(document).ready(function (){
-    $(".personal-form").on("submit", function (event){
+$(document).ready(function () {
+    $(".personal-form").on("submit", function (event) {
         event.preventDefault();
         $.ajax({
             type: "POST",
@@ -385,7 +379,7 @@ $(document).ready(function (){
             beforeSend: function () {
                 $(".personal-form button").html("please wait...");
                 // console.log(new FormData(this));
-            }, 
+            },
             success: function (response) {
                 $(".personal-form button").html("UPDATE");
                 alert(response);
@@ -394,13 +388,12 @@ $(document).ready(function (){
     });
 });
 //change Password
-$(document).ready(function(){
+$(document).ready(function () {
     $(".privacy-form").on("submit", function (event) {
         event.preventDefault();
         var password = $("#new-password").val();
         var re_password = $("#re-password").val();
-        if(password == re_password)
-        {
+        if (password == re_password) {
             $.ajax({
                 type: "POST",
                 url: "change_password.php",
@@ -410,110 +403,103 @@ $(document).ready(function(){
                 catch: false,
                 beforeSend: function () {
                     $(".change_password_btn").html("please wait...");
-                }, 
+                },
                 success: function (response) {
                     $(".change_password_btn").html("CHANGE PASSWORD");
-                    if(response.trim() == "password change successfully")
-                    {
+                    if (response.trim() == "password change successfully") {
                         alert(response);
                         $("..privacy-form").trigger("reset");
                     }
-                    else{
+                    else {
                         alert(response);
                     }
                 }
             });
         }
-        else{
+        else {
             alert("password and re-password must be same")
         }
     });
 });
 
 //star rating
-$(document).ready(function(){
-    $(".star").each(function(){
-        $(this).click(function (){
+$(document).ready(function () {
+    $(".star").each(function () {
+        $(this).click(function () {
             $(".star-btn").removeClass("d-none");
             var i;
             var star = $(".star");
             var index = $(this).attr("index");
             index++;
-            for(i=0;i<5;i++)
-            {
+            for (i = 0; i < 5; i++) {
                 $(star[i]).removeClass("fa-star text-warning");
                 $(star[i]).addClass("fa fa-star-o text-warning");
-                if(i<index)
-                {
+                if (i < index) {
                     $(star[i]).removeClass("fa fa-star-o");
                     $(star[i]).addClass("fa fa-star text-warning");
                     // alert();
                 }
             }
 
-            $(".star-btn").click(function(){
+            $(".star-btn").click(function () {
                 var product_id = $(this).attr("product-id");
-                if($("#comment").val() != "")
-                {
-                    if($("#picture").val() != "")
-                    {
+                if ($("#comment").val() != "") {
+                    if ($("#picture").val() != "") {
                         var picture = document.querySelector("#picture").files[0];
                         var form = new FormData();
-                        form.append("photo",picture);
-                        form.append("comment",$("#comment").val());
-                        form.append("product_id",product_id);
-                        form.append("rating",index);
+                        form.append("photo", picture);
+                        form.append("comment", $("#comment").val());
+                        form.append("product_id", product_id);
+                        form.append("rating", index);
 
                         $.ajax({
                             type: "POST",
-                            url:"star.php",
+                            url: "star.php",
                             data: form,
                             contentType: false,
                             processData: false,
                             catch: false,
                             success: function (response) {
-                                if(response.trim() == "success")
-                                {
+                                if (response.trim() == "success") {
                                     $(".star-btn").addClass("d-none");
                                     $(".comment-info").html("comment post");
                                     $(".comment-info").addClass("text-success");
                                     $(".comment-box").addClass("d-none");
                                     $(".picture-box").addClass("d-none");
                                     $(".comment-header").html("your rating");
-                                    setTimeout(function(){
+                                    setTimeout(function () {
                                         $(".comment-info").html($("#comment").val());
                                         $("comment-info").removeClass("text-success");
-                                    },2000);
+                                    }, 2000);
 
                                 }
                             }
                         });
                     }
-                    else{
+                    else {
                         alert("please upload a picture");
                     }
                 }
-                else{
+                else {
                     alert("comment box is empty");
                 }
-               
+
             });
-            
+
         });
     });
 });
 
 //sort by
-$(document).ready(function (){
-    $(".sort-by").on("change", function (){
+$(document).ready(function () {
+    $(".sort-by").on("change", function () {
         var brand = "";
         var category = "";
-        $(".category-btn").each(function (){
-           
-            if($(this).attr("class").indexOf("btn-primary") != -1)
-            {
-                    brand = $(this).attr("brand_name");
-                    category = $(this).attr("category_name");
+        $(".category-btn").each(function () {
+
+            if ($(this).attr("class").indexOf("btn-primary") != -1) {
+                brand = $(this).attr("brand_name");
+                category = $(this).attr("category_name");
             }
         });
         var sort_by = $(this).val();
@@ -523,7 +509,7 @@ $(document).ready(function (){
             data: {
                 brand: brand,
                 category: category,
-                sort_by : sort_by
+                sort_by: sort_by
             },
             beforeSend: function () {
                 $(".filter-result").html("processing.....");
@@ -532,67 +518,67 @@ $(document).ready(function (){
                 $(".filter-result").html("");
                 var all_data = JSON.parse(response.trim());
                 // console.log(all_data);
-                if(all_data.length == 0) {
+                if (all_data.length == 0) {
                     $(".filter-result").html("<h2><i class='fa fa-shopping-cart'></i>Oops! stock is empty</h2>");
                 }
-                else{
-                var i;
-                for(i=0; i<all_data.length; i++){
-                    var div = document.createElement("div");
-                    div.className = "text-center border shadow-sm p-3 mb-4";
-                    var img = document.createElement("img");
-                    img.src = "../../"+all_data[i].thumb_pic;
-                    img.width = "250";
-                    img.height = "316";
-                    //brand
-                    var brand_span = document.createElement("span");
-                    brand_span.className = "text-uppercase font-weight-bold";
-                    brand_span.innerHTML = "<br>"+all_data[i].brands+"<br>";
-                    //title
-                    var title_span = document.createElement("span");
-                    title_span.className = "text-uppercase";
-                    title_span.innerHTML = all_data[i].title+"<br>";
-                    //price
-                    var price_span = document.createElement("span");
-                    price_span.className = "text-uppercase";
-                    price_span.innerHTML = "<i class='fa fa-rupee'></i>"+all_data[i].price+"<br>";
-                    //add to cart
-                    var cart_btn = document.createElement("btn");
-                    cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
-                    cart_btn.innerHTML = "ADD TO CART";
-                    $(cart_btn).attr("product-title",all_data[i].title);
-                    $(cart_btn).attr("product-id",all_data[i].id);
-                    $(cart_btn).attr("product-price",all_data[i].price);
-                    $(cart_btn).attr("product-pic",all_data[i].thumb_pic);
-                    $(cart_btn).attr("product-brand",all_data[i].brands);
-                    $(cart_btn).click(function(){
-                        add_to_cart();
-                    });
-                    //buy btn
-                    var buy_btn = document.createElement("btn");
-                    buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn buy-btn";
-                    buy_btn.innerHTML = "BUY NOW";
-                    $(buy_btn).attr("product-title",all_data[i].title);
-                    $(buy_btn).attr("product-id",all_data[i].id);
-                    $(buy_btn).attr("product-price",all_data[i].price);
-                    $(buy_btn).attr("product-pic",all_data[i].thumb_pic);
-                    $(buy_btn).attr("product-brand",all_data[i].brands);
-                    $(buy_btn).on("click",function(){
-                        buy_now();
+                else {
+                    var i;
+                    for (i = 0; i < all_data.length; i++) {
+                        var div = document.createElement("div");
+                        div.className = "text-center border shadow-sm p-3 mb-4";
+                        var img = document.createElement("img");
+                        img.src = "../../" + all_data[i].thumb_pic;
+                        img.width = "250";
+                        img.height = "316";
+                        //brand
+                        var brand_span = document.createElement("span");
+                        brand_span.className = "text-uppercase font-weight-bold";
+                        brand_span.innerHTML = "<br>" + all_data[i].brands + "<br>";
+                        //title
+                        var title_span = document.createElement("span");
+                        title_span.className = "text-uppercase";
+                        title_span.innerHTML = all_data[i].title + "<br>";
+                        //price
+                        var price_span = document.createElement("span");
+                        price_span.className = "text-uppercase";
+                        price_span.innerHTML = "<i class='fa fa-rupee'></i>" + all_data[i].price + "<br>";
+                        //add to cart
+                        var cart_btn = document.createElement("btn");
+                        cart_btn.className = "btn btn-success mt-3 mr-3 cart-btn";
+                        cart_btn.innerHTML = "ADD TO CART";
+                        $(cart_btn).attr("product-title", all_data[i].title);
+                        $(cart_btn).attr("product-id", all_data[i].id);
+                        $(cart_btn).attr("product-price", all_data[i].price);
+                        $(cart_btn).attr("product-pic", all_data[i].thumb_pic);
+                        $(cart_btn).attr("product-brand", all_data[i].brands);
+                        $(cart_btn).click(function () {
+                            add_to_cart();
+                        });
+                        //buy btn
+                        var buy_btn = document.createElement("btn");
+                        buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn buy-btn";
+                        buy_btn.innerHTML = "BUY NOW";
+                        $(buy_btn).attr("product-title", all_data[i].title);
+                        $(buy_btn).attr("product-id", all_data[i].id);
+                        $(buy_btn).attr("product-price", all_data[i].price);
+                        $(buy_btn).attr("product-pic", all_data[i].thumb_pic);
+                        $(buy_btn).attr("product-brand", all_data[i].brands);
+                        $(buy_btn).on("click", function () {
+                            buy_now();
 
-                    });
+                        });
 
-                    $(div).append(img);
-                    $(div).append(brand_span);
-                    $(div).append(title_span);
-                    $(div).append(price_span);
-                    $(div).append(cart_btn);
-                    $(div).append(buy_btn);
-                    $(".filter-result").append(div);
-                }
+                        $(div).append(img);
+                        $(div).append(brand_span);
+                        $(div).append(title_span);
+                        $(div).append(price_span);
+                        $(div).append(cart_btn);
+                        $(div).append(buy_btn);
+                        $(".filter-result").append(div);
+                    }
                     // addto_cart();
                     // buy_now();
-            }
+                }
             }
         });
     });

@@ -56,10 +56,8 @@ if ($response) {
                     $response = $db->query($update_path);
                     if ($response) {
                         $message = "success";
-
                     } else {
                         $message = "unable to update file path";
-
                     }
                 }
             }
@@ -107,10 +105,8 @@ if ($response) {
                         $response = $db->query($update_path);
                         if ($response) {
                             $message = "success";
-
                         } else {
                             $message = "unable to update file path";
-
                         }
                     }
                 }
