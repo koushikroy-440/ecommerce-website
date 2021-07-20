@@ -203,7 +203,7 @@ require_once "common-files/databases/database.php";
   <h4 class="text-center my-4">PRODUCTS FOR YOU</h4>
       <div class="row">
         <?php
-            $get_data = "SELECT * FROM products LIMIT 8";
+            $get_data = "SELECT * FROM products ORDER BY RAND() LIMIT 12";
             $response = $db->query($get_data);
             if($response)
             {
@@ -225,6 +225,72 @@ require_once "common-files/databases/database.php";
               }
             }
 
+        ?>
+        <?php
+          $one = [];
+          $two = [];
+          $three = [];
+          $four = [];
+          $five = [];
+          $get_data = "SELECT * FROM purchase WHERE product_id = '1' AND ratings <> 0";
+          $response = $db->query($get_data);
+          if ($response)
+          {
+            while($data = $response->fetch_assoc())
+            {
+              if($data['ratings'] == 1)
+              {
+                array_push($one, 1);
+              }
+              else if($data['ratings'] == 2)
+              {
+                array_push($two, 2);
+              }
+              else if($data['ratings'] == 3)
+              {
+                array_push($three, 3);
+              }
+              else if($data['ratings'] == 4){
+                array_push($four, 4);
+              }
+              else if($data['ratings'] == 5){
+                array_push($five, 5);
+              }
+            }
+          }
+          $count_one = count($one);
+          $count_two = count($two);
+          $count_three = count($three);
+          $count_four = count($four);
+          $count_five = count($five);
+
+          $all_length = [$count_one, $count_two, $count_three, $count_four,$count_five];
+          $max = "0";
+          for($i=0;$i<count($all_length);$i++){
+            if($all_length[$i] > $max){
+              $max = $all_length[$i];
+            }
+          }
+          if($max == $count_one){
+            echo "one";
+
+          }
+          else if($max == $count_two)
+          {
+            echo "two";
+          }
+          else if($max == $count_three)
+          {
+            echo "three";
+          }
+          else if($max == $count_four)
+          {
+            echo "four";
+          }
+          else if($max == $count_five)
+          {
+            echo "five";
+          }
         ?>
       </div>
   </div>
