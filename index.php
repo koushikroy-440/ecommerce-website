@@ -200,60 +200,36 @@ require_once "common-files/databases/database.php";
 
   <!-- end category showcase -->
   <div class="container-fluid">
-  <h4 class="text-center my-4">PRODUCTS FOR YOU</h4>
-      <div class="row">
-        <?php
-            $get_data = "SELECT * FROM products ORDER BY RAND() LIMIT 12";
-            $response = $db->query($get_data);
-            if($response)
-            {
-              while($data = $response->fetch_assoc())
-              {
-                echo"<div class='col-md-3 py-5' align='center'>";
-                echo"<img src='".$data['thumb_pic'] ."' width='250' height='316'><br>";
-                echo"<span class='font-weight-bold text-uppercase'>".$data['brands']."</span><br> ";
-                echo"<i class='fa fa-star text-warning'></i>";
-                echo"<i class='fa fa-star text-warning'></i>";
-                echo"<i class='fa fa-star-o text-warning'></i>";
-                echo"<i class='fa fa-star-o text-warning'></i>";
-                echo"<i class='fa fa-star-o text-warning'></i><br>";
-                echo"<span>".$data['title']."</span> <br>";
-                echo"<span><i class='fa fa-rupee'> </i>". $data['price']."</span>";
-                echo"<br><button class='btn btn-success cart-btn' product-id='".$data['id'] ."' product-title='".$data['title']."' product-brand='".$data['brands']."' product-price='".$data['price']."' product-pic='".$data['thumb_pic']."'><i class='fa fa-shopping-cart'></i> ADD TO CART</button> 
-                <button class='btn btn-primary buy-btn' product-id='".$data['id'] ."'  product-title='".$data['title']."' product-brand='".$data['brands']."' product-price='".$data['price']."' product-pic='".$data['thumb_pic']."'><i class='fa fa-shopping-bag'></i> SHOP NOW</button>";
-                echo "</div>";
-              }
-            }
-
-        ?>
-        <?php
+    <h4 class="text-center my-4">PRODUCTS FOR YOU</h4>
+    <div class="row">
+      <?php
+      $get_data = "SELECT * FROM products ORDER BY RAND() LIMIT 12";
+      $response = $db->query($get_data);
+      if ($response) {
+        while ($data = $response->fetch_assoc()) {
+          $id = $data['id'];
+          echo "<div class='col-md-3 py-5' align='center'>";
+          echo "<img src='" . $data['thumb_pic'] . "' width='250' height='316'><br>";
+          echo "<span class='font-weight-bold text-uppercase'>" . $data['brands'] . "</span><br> ";
+          //display start of 
           $one = [];
           $two = [];
           $three = [];
           $four = [];
           $five = [];
-          $get_data = "SELECT * FROM purchase WHERE product_id = '1' AND ratings <> 0";
-          $response = $db->query($get_data);
-          if ($response)
-          {
-            while($data = $response->fetch_assoc())
-            {
-              if($data['ratings'] == 1)
-              {
+          $get_data = "SELECT * FROM purchase WHERE product_id = '$id' AND ratings <> 0";
+          $star_response = $db->query($get_data);
+          if ($star_response) {
+            while ($rating_data = $star_response->fetch_assoc()) {
+              if ($rating_data['ratings'] == 1) {
                 array_push($one, 1);
-              }
-              else if($data['ratings'] == 2)
-              {
+              } else if ($rating_data['ratings'] == 2) {
                 array_push($two, 2);
-              }
-              else if($data['ratings'] == 3)
-              {
+              } else if ($rating_data['ratings'] == 3) {
                 array_push($three, 3);
-              }
-              else if($data['ratings'] == 4){
+              } else if ($rating_data['ratings'] == 4) {
                 array_push($four, 4);
-              }
-              else if($data['ratings'] == 5){
+              } else if ($rating_data['ratings'] == 5) {
                 array_push($five, 5);
               }
             }
@@ -264,35 +240,62 @@ require_once "common-files/databases/database.php";
           $count_four = count($four);
           $count_five = count($five);
 
-          $all_length = [$count_one, $count_two, $count_three, $count_four,$count_five];
+          $all_length = [$count_one, $count_two, $count_three, $count_four, $count_five];
           $max = "0";
-          for($i=0;$i<count($all_length);$i++){
-            if($all_length[$i] > $max){
+          for ($i = 0; $i < count($all_length); $i++) {
+            if ($all_length[$i] > $max) {
               $max = $all_length[$i];
             }
           }
-          if($max == $count_one){
-            echo "one";
+          if ($max == $count_one) {
+            for ($i = 0; $i < 1; $i++) {
+              echo "<i class='fa fa-star text-warning'></i>";
+            }
+            $rest_star = 5 - 1;
+            for ($i = 0; $i < $rest_star; $i++) {
+              echo "<i class='fa fa-star-0 text-warning'></i>";
+            }
+          } else if ($max == $count_two) {
+            for ($i = 0; $i < 2; $i++) {
+              echo "<i class='fa fa-star text-warning'></i>";
+            }
+            $rest_star = 5 - 2;
+            for ($i = 0; $i < $rest_star; $i++) {
+              echo "<i class='fa fa-star-0 text-warning'></i>";
+            }
+          } else if ($max == $count_three) {
+            for ($i = 0; $i < 3; $i++) {
+              echo "<i class='fa fa-star text-warning'></i>";
+            }
+            $rest_star = 5 - 3;
+            for ($i = 0; $i < $rest_star; $i++) {
+              echo "<i class='fa fa-star-0 text-warning'></i>";
+            }
+          } else if ($max == $count_four) {
+            for ($i = 0; $i < 4; $i++) {
+              echo "<i class='fa fa-star text-warning'></i>";
+            }
+            $rest_star = 5 - 4;
+            for ($i = 0; $i < $rest_star; $i++) {
+              echo "<i class='fa fa-star-0 text-warning'></i>";
+            }
+          } else if ($max == $count_five) {
+            for ($i = 0; $i < 5; $i++) {
+              echo "<i class='fa fa-star text-warning'></i>";
+            }
+          }
+          
+          echo "<br><span>" . $data['title'] . "</span> <br>";
+          echo "<span><i class='fa fa-rupee'> </i>" . $data['price'] . "</span>";
+          echo "<br><button class='btn btn-success cart-btn' product-id='" . $data['id'] . "' product-title='" . $data['title'] . "' product-brand='" . $data['brands'] . "' product-price='" . $data['price'] . "' product-pic='" . $data['thumb_pic'] . "'><i class='fa fa-shopping-cart'></i> ADD TO CART</button> 
+                <button class='btn btn-primary buy-btn' product-id='" . $data['id'] . "'  product-title='" . $data['title'] . "' product-brand='" . $data['brands'] . "' product-price='" . $data['price'] . "' product-pic='" . $data['thumb_pic'] . "'><i class='fa fa-shopping-bag'></i> SHOP NOW</button>";
+          echo "</div>";
+        }
+      }
 
-          }
-          else if($max == $count_two)
-          {
-            echo "two";
-          }
-          else if($max == $count_three)
-          {
-            echo "three";
-          }
-          else if($max == $count_four)
-          {
-            echo "four";
-          }
-          else if($max == $count_five)
-          {
-            echo "five";
-          }
-        ?>
-      </div>
+      ?>
+
+    </div>
   </div>
   <?php
   include_once("asset/footer.php");

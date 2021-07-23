@@ -3,9 +3,7 @@
           <div class="input-group">
             <input type="email" placeholder="email@gmail.com" name="subscribe-email" class="form-control subscribe-email">
             <div class="input-group-append">
-              <span class="input-group-text">
-                SUBSCRIBE
-              </span>
+              <button class="btn btn-success subscribe-btn">SUBSCRIBE</button>
             </div>
           </div>
 

@@ -90,7 +90,11 @@
                 ?>
                 </a>
             </button>
-            <button class="btn border"><i class="fa fa-search"></i></button>
+            <button class="btn border d-flex align-items-center">
+                <input type="search" class="form-control mr-2 search" placeholder="search product" style="width: 350px;float:left">
+                
+            </button>
+            <button class="btn border search-icon"><i class="fa fa-search"></i></button>
             <button class="btn border dropdown">
             <i class="fa fa-user dropdown-toggle" data-toggle="dropdown"></i>
             <div class="dropdown-menu">
@@ -99,6 +103,7 @@
                 ?>
             </div>
             </button>
+            <div class="position-absolute bg-white search-hint " style="width:100%;z-index:1000;top:80px"></div>
         </div> 
 </nav>
 </div>

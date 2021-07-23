@@ -89,6 +89,7 @@
                 comment MEDIUMTEXT NULL,
                 picture MEDIUMBLOB,
                 status VARCHAR(50) DEFAULT 'processing',
+                dispatched_date DATE NULL,
                 PRIMARY KEY(id)
             )";
             $response = $db->query($create_table);

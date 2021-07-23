@@ -55,135 +55,103 @@ require_once "../common-files/databases/database.php";
         <li class="border-left p-2 collapse-item" access-link="create_brands_design.php">Create brand</li>
         <li class="border-left p-2 collapse-item" access-link="create_products_design.php">Create products</li>
       </ul>
-      <button class="btn w-100 text-left collapse-item active" access-link="delivery_area_design.php" style="font-size:20px">
+      <button class="btn w-100 mb-2 text-left collapse-item active" access-link="delivery_area_design.php" style="font-size:20px">
         <i class="fa fa-map-marker"></i>
         Delivery area
+      </button>
+
+      <button class="btn w-100 text-left collapse-item active" access-link="sales_report_design.php" style="font-size:20px">
+        <i class="fa fa-shopping-bag"></i>
+        Sales report
       </button>
     </div>
 
   </div>
   <div class="page">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="btn-group border bg-white shadow">
-          <button class="btn bg-white">SHORT BY</button>
-          <button class="btn bg-white">
-            <select>
-              <option value="all-data">ALL DATA</option>
-            </select>
-          </button>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="jumbotron bg-white py-3">
+              <h4>KEYWORD PLANNER</h4>
+              <form class="keyword-form">
+                  <div class="form-group">
+                    <label for="p-keyword" >Primary Keyword</label>
+                    <select class="form-control p-keyword" id="p-keyword" name="p-keyword" name="p-keyword">
+                      <option value="">CHOOSE PRIMARY KEYWORD</option>
+                      <?php
+                        $get_data = "SELECT * FROM category";
+                        $response = $db->query($get_data);
+                        if($response)
+                        {
+                          while($data = $response->fetch_assoc())
+                          {
+                              echo "<option>".$data['category_name']."</option>";
+                          }
+                        }
+                      ?>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="s-keyword" >Secondary keyword</label>
+                    <textarea class="form-control s-keyword" required name="s-keyword" id="s-keyword" rows="5" ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">submit</button>
+                  </div>
+
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6"></div>
         </div>
-
-        <div class="btn-group border bg-white shadow">
-          <button class="btn bg-white">EXPORT TO</button>
-          <button class="btn bg-white">
-            <select>
-              <option>Choose formate</option>
-              <option>pdf</option>
-              <option>xls</option>
-            </select>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-      <div class="table-responsive">
-        <table class="w-100 purchase-table text-center border table table-bordered">
-          <tr>
-            <th>S/No</th>
-            <th>PRODUCT_ID</th>
-            <th>TITLE</th>
-            <th>QUANTITY</th>
-            <th>PRICE</th>
-            <th>ADDRESS</th>
-            <th>STATE</th>
-            <th>COUNTRY</th>
-            <th>PINCODE</th>
-            <th>PURCHASE DATE</th>
-            <th>CUSTOMER NAME</th>
-            <th>USERNAME</th>
-            <th>MOBILE</th>
-            <th>STATUS</th>
-            <th>ACTION</th>
-          </tr>
-          <?php
-            $product = "SELECT * FROM purchase";
-            $response = $db->query($product);
-            if($response)
-            {
-              while($data = $response->fetch_assoc())
-              {
-                echo "<tr>";
-                echo "<td>";
-                echo "$data[id]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[product_id]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[title]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[quantity]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[price]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[address]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[state]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[country]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[pincode]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[purchase_date]";
-                echo "</td>";
-                
-
-                echo "<td>";
-                echo "$data[fullname]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[email]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[phone]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "$data[status]";
-                echo "</td>";
-
-                echo "<td>";
-                echo "<button class='btn btn-success'>dispatch</button>";
-                echo "</td>";
-
-              }
-            }
-          ?>
-        </table>
-        </div>
-      </div>
-    </div>
   </div>
+  <script>
+    $(document).ready(function(){
+      $(".keyword-form").submit(function(e){
+          e.preventDefault();
+          if($(".p-keyword").val() != "CHOOSE PRIMARY KEYWORD")
+          {
+              $.ajax({
+                type: "POST",
+                url: "php/keyword.php",
+                data: new FormData(this),
+                processData: false,
+                contentType:false,
+                cache: false,
+                success: function(response){
+                  alert(response);
+                }
+              });
+          }
+          else{
+            alert("please choose a keyword");
+          }
+      });
+    });
+
+    //appear secondary key
+
+    $(document).ready(function(){
+      $(".p-keyword").on("change", function(){
+        if($(this).val() != "CHOOSE PRIMARY KEYWORD")
+        {
+          var p_key = $(this).val();
+          $.ajax({
+            type: "POST",
+            url: "php/appear_secondary_key.php",
+            data:{
+              p_key : p_key,
+            },
+            success: function(response){
+              $(".s-keyword").val(response.trim());
+              // console.log(response);
+            }
+          });
+        }
+      });
+    });
+  </script>
  
 </body>
 

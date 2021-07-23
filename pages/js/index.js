@@ -274,7 +274,7 @@ $(document).ready(function () {
 //default btn
 $(document).ready(function () {
     var category_btn = $(".category-btn");
-    // category_btn[0].click();
+    category_btn[0].click();
 });
 
 //filter by price
@@ -584,3 +584,115 @@ $(document).ready(function () {
     });
 });
 
+//subscribe email
+$(document).ready(function(){
+    $(".subscribe-btn").click(function(e){
+        e.preventDefault();
+        var email = $(".subscribe-email").val();
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/ecommerce-project/pages/php/subscribe_verify.php",
+            data: {
+                email: email
+            },
+            success: function (response) {
+                if(response.trim() != "error") {
+                    var count = 3;
+                    function verification(){ 
+                    var data = JSON.parse(response.trim());
+                    var code = data[1];
+                    var prompt = window.prompt("please visit your mail and enter your code");
+                    if(prompt == code) {
+                        $.ajax({
+                            type: "POST",
+                            url : "http://localhost/ecommerce-project/pages/php/subscribed_user.php",
+                            data : {
+                                email : email,
+                            },
+                            success: function (response) {
+                                alert(response);
+                            }
+                        });
+                    }
+                    else if(prompt == null || prompt == "") {
+                        verification();
+                    }
+                    else{
+                        alert("wrong code");
+                        if(--count>0)
+                        {
+                            verification();
+                        }
+                        
+                    }
+                }
+                verification();
+                }
+                else{
+                    alert(response);
+                }
+            //    alert(response);
+            }
+        });
+    });
+});
+
+//ajax live search
+$(document).ready(function(){
+    $(".search").on("input", function(){
+        var keyword = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/ecommerce-project/pages/php/live_search.php",
+            data: {
+                keyword: keyword
+            },
+            success: function (response) {
+                $(".search-hint").html(response);
+                $(".search-tag").on("mouseover", function (){
+                    $(this).css({
+                        backgroundColor: '#77AFE0',
+                        color: 'white',
+                        cursor: 'pointer'
+                    });
+                });
+                $(".search-tag").on("mouseout", function (){
+                    $(this).css({
+                        backgroundColor: 'inherit',
+                        color: 'black'
+                    });
+                });
+                $(".search-tag").each(function () {
+                    $(this).click(function(){
+                        var product_id = $(this).attr("product-id");
+                        $(".search").val($(this).html());
+                        $(".search-hint").html('');
+                        window.location = "http://localhost/ecommerce-project/pages/php/buy_product.php?product-id="+product_id;
+                    });
+                });
+            }
+        });
+    });
+});
+
+//search
+$(document).ready(function(){
+    $(".search").on("keypress", function(e){
+        if(e.keyCode == 13 && $(this).val() != ""){
+            var key_word = $(this).val().trim();
+            window.location = "http://localhost/ecommerce-project/pages/php/search_result.php?search="+key_word;
+        }
+    });
+});
+
+$(document).ready(function(){
+    $(".search-icon").on("click", function(e){
+        if( $(".search").val() != ""){
+            var key_word = $(".search").val().trim();
+            window.location = "http://localhost/ecommerce-project/pages/php/search_result.php?search="+key_word;
+        }
+        else{
+            alert("please enter something in search box");
+        }
+    });
+});
