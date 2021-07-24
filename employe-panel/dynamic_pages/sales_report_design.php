@@ -26,7 +26,7 @@ echo '
           <button class="btn bg-white">
             <select class="choose_format">
               <option>Choose formate</option>
-              <option>pdf</option>
+              
               <option>xls</option>
             </select>
           </button>

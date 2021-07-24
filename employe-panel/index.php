@@ -22,7 +22,7 @@ require_once "../common-files/databases/database.php";
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="js/indexs.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
 </head>
 
 <body>
@@ -55,12 +55,18 @@ require_once "../common-files/databases/database.php";
         <li class="border-left p-2 collapse-item" access-link="create_brands_design.php">Create brand</li>
         <li class="border-left p-2 collapse-item" access-link="create_products_design.php">Create products</li>
       </ul>
-      <button class="btn w-100 mb-2 text-left collapse-item active" access-link="delivery_area_design.php" style="font-size:20px">
+
+      <button class="btn w-100 text-left collapse-item " access-link="keyword_planner_design.php" style="font-size:20px">
+        <i class="fa fa-tags"></i>
+        Keyword planner
+      </button>
+
+      <button class="btn w-100 mb-2 text-left collapse-item " access-link="delivery_area_design.php" style="font-size:20px">
         <i class="fa fa-map-marker"></i>
         Delivery area
       </button>
 
-      <button class="btn w-100 text-left collapse-item active" access-link="sales_report_design.php" style="font-size:20px">
+      <button class="btn w-100 text-left collapse-item " access-link="sales_report_design.php" style="font-size:20px">
         <i class="fa fa-shopping-bag"></i>
         Sales report
       </button>
@@ -68,91 +74,42 @@ require_once "../common-files/databases/database.php";
 
   </div>
   <div class="page">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="jumbotron bg-white py-3">
-              <h4>KEYWORD PLANNER</h4>
-              <form class="keyword-form">
-                  <div class="form-group">
-                    <label for="p-keyword" >Primary Keyword</label>
-                    <select class="form-control p-keyword" id="p-keyword" name="p-keyword" name="p-keyword">
-                      <option value="">CHOOSE PRIMARY KEYWORD</option>
-                      <?php
-                        $get_data = "SELECT * FROM category";
-                        $response = $db->query($get_data);
-                        if($response)
-                        {
-                          while($data = $response->fetch_assoc())
-                          {
-                              echo "<option>".$data['category_name']."</option>";
-                          }
-                        }
-                      ?>
-                    </select>
-                  </div>
 
-                  <div class="form-group">
-                    <label for="s-keyword" >Secondary keyword</label>
-                    <textarea class="form-control s-keyword" required name="s-keyword" id="s-keyword" rows="5" ></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-primary">submit</button>
-                  </div>
-
-              </form>
-            </div>
+  </div>
+  <div class="container">
+    <div class="modal fade" id="sub-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Do you want to send notification ?</h4>
           </div>
-          <div class="col-md-6"></div>
+          <div class="modal-body d-flex justify-content-between">
+            <div class="btn-group border shadow-sm">
+              <button class="btn btn-danger rounded-o">SUBSCRIBE</button>
+              <button class="btn btn-dark rounded-o">
+                <?php
+                $count = "SELECT COUNT(id) AS result FROM subscribe";
+                $response = $db->query($count);
+                if ($response) {
+                  $data = $response->fetch_assoc();
+                  echo $data['result'];
+                }
+                ?>
+              </button>
+            </div>
+            <button class="btn btn-primary send-btn">SEND</button>
+          </div>
+          <div class="modal-footer">
+            <span class="d-block mx-auto">shop notification</span>
+          </div>
         </div>
+      </div>
+    </div>
   </div>
   <script>
-    $(document).ready(function(){
-      $(".keyword-form").submit(function(e){
-          e.preventDefault();
-          if($(".p-keyword").val() != "CHOOSE PRIMARY KEYWORD")
-          {
-              $.ajax({
-                type: "POST",
-                url: "php/keyword.php",
-                data: new FormData(this),
-                processData: false,
-                contentType:false,
-                cache: false,
-                success: function(response){
-                  alert(response);
-                }
-              });
-          }
-          else{
-            alert("please choose a keyword");
-          }
-      });
-    });
 
-    //appear secondary key
-
-    $(document).ready(function(){
-      $(".p-keyword").on("change", function(){
-        if($(this).val() != "CHOOSE PRIMARY KEYWORD")
-        {
-          var p_key = $(this).val();
-          $.ajax({
-            type: "POST",
-            url: "php/appear_secondary_key.php",
-            data:{
-              p_key : p_key,
-            },
-            success: function(response){
-              $(".s-keyword").val(response.trim());
-              // console.log(response);
-            }
-          });
-        }
-      });
-    });
   </script>
- 
+
 </body>
 
 </html>

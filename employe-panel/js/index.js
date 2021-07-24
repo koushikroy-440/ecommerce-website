@@ -59,8 +59,7 @@ function dynamic_request(request_link) {
     },
     success: function (response) {
       $(".page").html(response);
-      if(request_link == "delivery_area_design.php")
-      {
+      if (request_link == "delivery_area_design.php") {
         delivery_area();
       }
       if (request_link == "category_showcase_design.php") {
@@ -73,7 +72,10 @@ function dynamic_request(request_link) {
         branding_info();
       }
       if (request_link == "sales_report_design.php") {
-        sales_report()
+        sales_report();
+      }
+      if (request_link == "keyword_planner_design.php") {
+        keyword();
       }
       //====================create product =================
       $(".create-product-form").on("submit", function (e) {
@@ -115,6 +117,32 @@ function dynamic_request(request_link) {
                 $(".create-products-progress").addClass("d-none");
                 $(".progress-bar").css({ width: "0" });
                 $(".create-product-form").trigger("reset");
+                setTimeout(function () {
+                  $("#sub-modal").modal("show");
+                  //send notifications
+                  $(".send-btn").click(function () {
+                    $.ajax({
+                      type: "POST",
+                      url: "php/send_notification.php",
+                      beforeSend: function () {
+                        $(".send-btn").html("processing....");
+                      },
+                      success: function (response) {
+                        if (response.trim() == "success") {
+                          $(".send-btn").html("success");
+                          setTimeout(function () {
+                            $("#sub-modal").modal({
+                              show: false,
+                            });
+                          }, 2000);
+                        }
+                        else {
+                          $(".send-btn").html(response);
+                        }
+                      }
+                    });
+                  });
+                }, 1000);
               } else {
                 alert(response);
               }
@@ -712,7 +740,7 @@ function header_showcase() {
     });
 
     $("#subtitle-text").on("input", function () {
-      
+
       var length = this.value.length;
       $(".showcase-subtitle").html(this.value);
       $(".subtitle-limit").html(length);
@@ -1182,10 +1210,10 @@ function category_showcase() {
 }
 
 //delivery area
-function delivery_area(){
+function delivery_area() {
   //get states
-  $("document").ready(function() {
-    $(".country").on("change", function() {
+  $("document").ready(function () {
+    $(".country").on("change", function () {
       $(".state").html('');
       var option = $(".country option");
       var i;
@@ -1198,7 +1226,7 @@ function delivery_area(){
             data: {
               country_id: country_id
             },
-            success: function(response) {
+            success: function (response) {
               var states = JSON.parse(response.trim());
               // console.log(states);
               var j;
@@ -1214,8 +1242,8 @@ function delivery_area(){
   });
 
   //get cities
-  $("document").ready(function() {
-    $(".state").on("change", function() {
+  $("document").ready(function () {
+    $(".state").on("change", function () {
       $('.city').html('');
       var option = $(".state option");
       for (var i = 0; i < option.length; i++) {
@@ -1227,7 +1255,7 @@ function delivery_area(){
             data: {
               state_id: state_id
             },
-            success: function(response) {
+            success: function (response) {
               var cities = JSON.parse(response.trim());
               for (var j = 0; j < cities.length; j++) {
                 var option = "<option>" + cities[j].name + "</option>";
@@ -1240,16 +1268,16 @@ function delivery_area(){
     });
   });
   //get PinCode
-  $(document).ready(function() {
-    $(".city").on("change", function() {
+  $(document).ready(function () {
+    $(".city").on("change", function () {
       var city = $(this).val();
       $.ajax({
         type: "GET",
-        url: "https://api.postalpincode.in/postoffice/"+city,
-        success: function(response) {
-          if(response[0].PostOffice.length != 0 || response[0].PostOffice.length == 0) {
-          var length = response[0].PostOffice.length-1;
-          $(".pin_code").val(response[0].PostOffice[length].Pincode);
+        url: "https://api.postalpincode.in/postoffice/" + city,
+        success: function (response) {
+          if (response[0].PostOffice.length != 0 || response[0].PostOffice.length == 0) {
+            var length = response[0].PostOffice.length - 1;
+            $(".pin_code").val(response[0].PostOffice[length].Pincode);
           }
           // console.log(response);
           // alert(length);
@@ -1259,32 +1287,31 @@ function delivery_area(){
     });
   });
   //set area 
-  $(document).ready(function(){
-    $(".set_area_form").submit(function(e){
-        e.preventDefault();
-        $.ajax({
-          type: "POST",
-          url: "php/set_area.php",
-          data: new FormData(this),
-          processData: false,
-          contentType: false,
-          cache: false,
-          success: function(response){
-            if(response.trim() == "success")
-            {
-              $(".set_area_form").trigger('reset');
-            }
+  $(document).ready(function () {
+    $(".set_area_form").submit(function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "php/set_area.php",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (response) {
+          if (response.trim() == "success") {
+            $(".set_area_form").trigger('reset');
           }
-        });
+        }
+      });
     });
   });
 }
 
 //sales report
-function sales_report(){
-  $(document).ready(function(){
-    $(".dispatch_btn").each(function(){
-      $(this).click(function(){
+function sales_report() {
+  $(document).ready(function () {
+    $(".dispatch_btn").each(function () {
+      $(this).click(function () {
         var clicked_btn = this;
         var order_id = $(this).attr("order_id");
         var title = $(this).attr("title");
@@ -1298,243 +1325,365 @@ function sales_report(){
           type: "POST",
           url: "php/dispatch.php",
           data: {
-            order_id:order_id,
-            title:title,
-            quantity:quantity,
-            full_name:full_name,
-            email:email,
-            price:price,
-            phone:phone,
-            address:address
+            order_id: order_id,
+            title: title,
+            quantity: quantity,
+            full_name: full_name,
+            email: email,
+            price: price,
+            phone: phone,
+            address: address
           },
-          beforeSend: function(){
+          beforeSend: function () {
             $(clicked_btn).html('wait....');
           },
-          success: function(response){
-            if(response.trim() == "success"){
+          success: function (response) {
+            if (response.trim() == "success") {
               $(clicked_btn).html('dispatched');
               //show dispatched item
-              var item_no = Number(sessionStorage.getItem("count"))+1;
-              sessionStorage.setItem("count",item_no);
-              $(".d_all_btn").html(item_no+" items dispatched");
+              var item_no = Number(sessionStorage.getItem("count")) + 1;
+              sessionStorage.setItem("count", item_no);
+              $(".d_all_btn").html(item_no + " items dispatched");
               //complete dispatch
               var all_item_count = Number($(".s-no").length);
-              if(all_item_count == item_no)
-              {
+              if (all_item_count == item_no) {
                 $(".d_all_btn").html('complete');
                 sessionStorage.removeItem("count");
-                setTimeout(function(){
+                setTimeout(function () {
                   $(".d_all_btn").html('dispatch all');
-                },2000);
+                }, 2000);
               }
             }
             alert(response);
           }
         });
-      
+
       });
 
     });
   });
-  $(document).ready(function(){
-    $(".d_all_btn").click(function(){
+  $(document).ready(function () {
+    $(".d_all_btn").click(function () {
       var status = $(".status");
-      var i,message="dispatch all";
-      for(i = 0; i <status.length;i++){
-        if(status[i].innerHTML == "processing")
-        {
+      var i, message = "dispatch all";
+      for (i = 0; i < status.length; i++) {
+        if (status[i].innerHTML == "processing") {
           var dispatch_btn = $(".dispatch_btn");
-          
-          for(i = 0; i <dispatch_btn.length; i++) {
+
+          for (i = 0; i < dispatch_btn.length; i++) {
             dispatch_btn[i].click();
           }
         }
-        else{
-            message = "No item";
+        else {
+          message = "No item";
         }
       }
       $(".d_all_btn").html(message);
-      
+
     });
   });
 
   //export to xls
-  $(document).ready(function(){
-      $(".choose_format").on('change', function(){
-        if($(this).val() == "xls")
-        {
-          window.location = "php/export_to_xls.php";
-        }
-        else if($(this).val() == "pdf")
-        {
-          window.location = "php/dompdf.php";
-        }
-      });
+  $(document).ready(function () {
+    $(".choose_format").on('change', function () {
+      if ($(this).val() == "xls") {
+        window.location = "php/export_to_xls.php";
+      }
+      else if ($(this).val() == "pdf") {
+        window.location = "php/dompdf.php";
+      }
+    });
   });
   //sort by 
-  $(document).ready(function(){
-    $(".sort-by").on("change", function(){
+  $(document).ready(function () {
+    $(".sort-by").on("change", function () {
       $(".table-responsive").html("");
-      if($(this).val() != "all-data")
-      {
+      if ($(this).val() != "all-data") {
         var option = $(this).val();
         $.ajax({
           type: "POST",
           url: "php/sort_by.php",
-          data:{
+          data: {
             option: option,
           },
-          success: function(response){
-            if(response.trim() != "order now found")
-            {
+          success: function (response) {
+            if (response.trim() != "order now found") {
               var table = document.createElement("table");
               table.className = "w-100 purchase-table text-center border table table-bordered";
               table.innerHTML = "<tr> <th>S/No</th><th>PRODUCT_ID</th><th>TITLE</th><th>QUANTITY</th><th>PRICE</th><th>ADDRESS</th><th>STATE</th><th>COUNTRY</th><th>PINCODE</th><th>PURCHASE DATE</th><th>CUSTOMER NAME</th><th>USERNAME</th><th>MOBILE</th><th>STATUS</th><th>ACTION</th></tr>";
               $(".table-responsive").append(table);
               var all_data = JSON.parse(response.trim());
               var i;
-              for(i=0;i<all_data.length; i++)
-              {
-                  var tr = document.createElement("tr");
-                  var id_td = document.createElement("td");
-                  id_td.innerHTML = all_data[i].id;
-                  tr.append(id_td);
+              for (i = 0; i < all_data.length; i++) {
+                var tr = document.createElement("tr");
+                var id_td = document.createElement("td");
+                id_td.innerHTML = all_data[i].id;
+                tr.append(id_td);
 
-                  var product_id_td = document.createElement("td");
-                  product_id_td.innerHTML = all_data[i].product_id;
-                  tr.append(product_id_td);
-                  
-                  var title_td = document.createElement("td");
-                  title_td.innerHTML = all_data[i].title;
-                  tr.append(title_td);
+                var product_id_td = document.createElement("td");
+                product_id_td.innerHTML = all_data[i].product_id;
+                tr.append(product_id_td);
 
-                  var quantity_td = document.createElement("td");
-                  quantity_td.innerHTML = all_data[i].quantity;
-                  tr.append(quantity_td);
+                var title_td = document.createElement("td");
+                title_td.innerHTML = all_data[i].title;
+                tr.append(title_td);
 
-                  var price_td = document.createElement("td");
-                  price_td.innerHTML = all_data[i].price;
-                  tr.append(price_td);
+                var quantity_td = document.createElement("td");
+                quantity_td.innerHTML = all_data[i].quantity;
+                tr.append(quantity_td);
 
-                  var address_td = document.createElement("td");
-                  address_td.innerHTML = all_data[i].address;
-                  tr.append(address_td);
+                var price_td = document.createElement("td");
+                price_td.innerHTML = all_data[i].price;
+                tr.append(price_td);
 
-                  var state_td = document.createElement("td");
-                  state_td.innerHTML = all_data[i].state;
-                  tr.append(state_td);
+                var address_td = document.createElement("td");
+                address_td.innerHTML = all_data[i].address;
+                tr.append(address_td);
 
-                  var country_td = document.createElement("td");
-                  country_td.innerHTML = all_data[i].country;
-                  tr.append(country_td);
+                var state_td = document.createElement("td");
+                state_td.innerHTML = all_data[i].state;
+                tr.append(state_td);
 
-                  var pincode_td = document.createElement("td");
-                  pincode_td.innerHTML = all_data[i].pincode;
-                  tr.append(pincode_td);
+                var country_td = document.createElement("td");
+                country_td.innerHTML = all_data[i].country;
+                tr.append(country_td);
 
-                  var purchase_date_td = document.createElement("td");
-                  purchase_date_td.innerHTML = all_data[i].purchase_date;
-                  tr.append(purchase_date_td);
+                var pincode_td = document.createElement("td");
+                pincode_td.innerHTML = all_data[i].pincode;
+                tr.append(pincode_td);
 
-                  var fullname_td = document.createElement("td");
-                  fullname_td.innerHTML = all_data[i].fullname;
-                  tr.append(fullname_td);
+                var purchase_date_td = document.createElement("td");
+                purchase_date_td.innerHTML = all_data[i].purchase_date;
+                tr.append(purchase_date_td);
 
-                  var email_td = document.createElement("td");
-                  email_td.innerHTML = all_data[i].email;
-                  tr.append(email_td);
+                var fullname_td = document.createElement("td");
+                fullname_td.innerHTML = all_data[i].fullname;
+                tr.append(fullname_td);
 
-                  var phone_td = document.createElement("td");
-                  phone_td.innerHTML = all_data[i].phone;
-                  tr.append(phone_td);
+                var email_td = document.createElement("td");
+                email_td.innerHTML = all_data[i].email;
+                tr.append(email_td);
 
-                  var status_td = document.createElement("td");
-                  status_td.innerHTML = all_data[i].status;
-                  tr.append(status_td);
+                var phone_td = document.createElement("td");
+                phone_td.innerHTML = all_data[i].phone;
+                tr.append(phone_td);
 
-                  if(all_data[i].status == 'processing')
-                  {
-                    var action_button = document.createElement("button");
-                    action_button.className = 'btn btn-success dispatch_btn';
-                    $(action_button).html('dispatch');
-                    $(action_button).attr("order_id",all_data[i].id);
-                    $(action_button).attr("title",all_data[i].title);
-                    $(action_button).attr("quantity",all_data[i].quantity);
-                    $(action_button).attr("full_name",all_data[i].fullname);
-                    $(action_button).attr("email",all_data[i].email);
-                    $(action_button).attr("phone",all_data[i].phone);
-                    $(action_button).attr("amount",all_data[i].amount);
-                    $(action_button).attr("address",all_data[i].address);
-                    var action_td = document.createElement('td');
-                    action_td.append(action_button);
-                    tr.append(action_td);
-                    action_button.onclick = function(){
-                      var clicked_btn = this;
-        var order_id = $(this).attr("order_id");
-        var title = $(this).attr("title");
-        var quantity = $(this).attr("quantity");
-        var full_name = $(this).attr("full_name");
-        var email = $(this).attr("email");
-        var price = $(this).attr("amount");
-        var phone = $(this).attr("phone");
-        var address = $(this).attr("address");
-        $.ajax({
-          type: "POST",
-          url: "php/dispatch.php",
-          data: {
-            order_id:order_id,
-            title:title,
-            quantity:quantity,
-            full_name:full_name,
-            email:email,
-            price:price,
-            phone:phone,
-            address:address
-          },
-          beforeSend: function(){
-            $(clicked_btn).html('wait....');
-          },
-          success: function(response){
-            if(response.trim() == "success"){
-              $(clicked_btn).html('dispatched');
-              //show dispatched item
-              var item_no = Number(sessionStorage.getItem("count"))+1;
-              sessionStorage.setItem("count",item_no);
-              $(".d_all_btn").html(item_no+" items dispatched");
-              //complete dispatch
-              var all_item_count = Number($(".s-no").length);
-              if(all_item_count == item_no)
-              {
-                $(".d_all_btn").html('complete');
-                sessionStorage.removeItem("count");
-                setTimeout(function(){
-                  $(".d_all_btn").html('dispatch all');
-                },2000);
-              }
-            }
-            alert(response);
-          }
-        });
-                    }
+                var status_td = document.createElement("td");
+                status_td.innerHTML = all_data[i].status;
+                tr.append(status_td);
 
-                  }
-                  else if(all_data[i].status == 'dispatched')
-                  {
-                    var action_button = document.createElement("button");
-                    action_button.innerHTML = "already dispatched on"+all_data[i].dispatched_date;
-                    action_button.className = 'btn btn-danger';
-                    var action_td = document.createElement('td');
-                    action_td.append(action_button);
-                    tr.append(action_td);
+                if (all_data[i].status == 'processing') {
+                  var action_button = document.createElement("button");
+                  action_button.className = 'btn btn-success dispatch_btn';
+                  $(action_button).html('dispatch');
+                  $(action_button).attr("order_id", all_data[i].id);
+                  $(action_button).attr("title", all_data[i].title);
+                  $(action_button).attr("quantity", all_data[i].quantity);
+                  $(action_button).attr("full_name", all_data[i].fullname);
+                  $(action_button).attr("email", all_data[i].email);
+                  $(action_button).attr("phone", all_data[i].phone);
+                  $(action_button).attr("amount", all_data[i].amount);
+                  $(action_button).attr("address", all_data[i].address);
+                  var action_td = document.createElement('td');
+                  action_td.append(action_button);
+                  tr.append(action_td);
+                  action_button.onclick = function () {
+                    var clicked_btn = this;
+                    var order_id = $(this).attr("order_id");
+                    var title = $(this).attr("title");
+                    var quantity = $(this).attr("quantity");
+                    var full_name = $(this).attr("full_name");
+                    var email = $(this).attr("email");
+                    var price = $(this).attr("amount");
+                    var phone = $(this).attr("phone");
+                    var address = $(this).attr("address");
+                    $.ajax({
+                      type: "POST",
+                      url: "php/dispatch.php",
+                      data: {
+                        order_id: order_id,
+                        title: title,
+                        quantity: quantity,
+                        full_name: full_name,
+                        email: email,
+                        price: price,
+                        phone: phone,
+                        address: address
+                      },
+                      beforeSend: function () {
+                        $(clicked_btn).html('wait....');
+                      },
+                      success: function (response) {
+                        if (response.trim() == "success") {
+                          $(clicked_btn).html('dispatched');
+                          //show dispatched item
+                          var item_no = Number(sessionStorage.getItem("count")) + 1;
+                          sessionStorage.setItem("count", item_no);
+                          $(".d_all_btn").html(item_no + " items dispatched");
+                          //complete dispatch
+                          var all_item_count = Number($(".s-no").length);
+                          if (all_item_count == item_no) {
+                            $(".d_all_btn").html('complete');
+                            sessionStorage.removeItem("count");
+                            setTimeout(function () {
+                              $(".d_all_btn").html('dispatch all');
+                            }, 2000);
+                          }
+                        }
+                        alert(response);
+                      }
+                    });
                   }
 
-                  table.appendChild(tr);
-                  
+                }
+                else if (all_data[i].status == 'dispatched') {
+                  var action_button = document.createElement("button");
+                  action_button.innerHTML = "already dispatched on" + all_data[i].dispatched_date;
+                  action_button.className = 'btn btn-danger';
+                  var action_td = document.createElement('td');
+                  action_td.append(action_button);
+                  tr.append(action_td);
+                }
+
+                table.appendChild(tr);
+
               }
             }
           }
         });
       }
+    });
+  });
+}
+
+
+//keyword
+function keyword() {
+  $(document).ready(function () {
+    $(".keyword-form").submit(function (e) {
+      e.preventDefault();
+      if ($(".p-keyword").val() != "CHOOSE PRIMARY KEYWORD") {
+        $.ajax({
+          type: "POST",
+          url: "php/keyword.php",
+          data: new FormData(this),
+          processData: false,
+          contentType: false,
+          cache: false,
+          success: function (response) {
+            alert(response);
+          }
+        });
+      }
+      else {
+        alert("please choose a keyword");
+      }
+    });
+  });
+
+  //appear secondary key
+
+  $(document).ready(function () {
+    $(".p-keyword").on("change", function () {
+      if ($(this).val() != "CHOOSE PRIMARY KEYWORD") {
+        var p_key = $(this).val();
+        $.ajax({
+          type: "POST",
+          url: "php/appear_secondary_key.php",
+          data: {
+            p_key: p_key,
+          },
+          success: function (response) {
+            $(".s-keyword").val($(".s-keyword").val() + response.trim());
+            // console.log(response);
+          }
+        });
+      }
+    });
+  });
+  $(document).ready(function () {
+    $(".copy-btn").click(function () {
+      var tags = "";
+      $(".tags").each(function () {
+        tags += $(this).text();
+        $(".s-keyword").val(tags) + " , ";
+      });
+    });
+  });
+
+  $(document).ready(function () {
+    $(".copy-btn-brands").click(function () {
+      var tags = "";
+      $(".tags").each(function () {
+        tags += $(this).text();
+        $(".brands-s-keyword").val(tags) + " , ";
+      });
+    });
+  });
+
+  //appear brands
+  $(document).ready(function () {
+    $(".brands-category").on("change", function () {
+      if ($(this).val() != "Choose") {
+        var cat_name = $(this).val();
+        $.ajax({
+          type: "POST",
+          url: "php/show_brands.php",
+          data: {
+            cat_name: cat_name,
+          },
+          success: function (response) {
+            $("#brands-p-keyword").html(response + $("#brands-p-keyword").val());
+            // alert(response);
+          }
+        });
+      }
+    });
+  });
+
+  $(document).ready(function () {
+    $(".brand-form").submit(function (e) {
+      e.preventDefault();
+      if ($(".brands-p-keyword").val() != "Choose primary key") {
+        $.ajax({
+          type: "POST",
+          url: "php/keyword.php",
+          data: new FormData(this),
+          processData: false,
+          contentType: false,
+          cache: false,
+          success: function (response) {
+            alert(response);
+          }
+        });
+      }
+      else {
+        alert("please choose a keyword");
+      }
+    });
+  });
+
+  //delete keyword
+  $(document).ready(function () {
+    $(".delete-keyword").click(function () {
+      var tags = [];
+      // alert();
+      $(".tags").each(function (i) {
+        tags[i] = $(this).text().trim();
+      });
+      $.ajax({
+        type: "POST",
+        url: "php/delete_keyword.php",
+        data: {
+          tags: JSON.stringify(tags),
+        },
+        success: function (response) {
+          if (response.trim() == "success") {
+            window.location = location.href;
+          }
+          // alert(response);
+        }
+      });
     });
   });
 }
