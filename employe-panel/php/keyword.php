@@ -51,5 +51,3 @@
             echo "please try again later";
         }
     }
-
-?>

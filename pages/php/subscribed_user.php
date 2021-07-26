@@ -40,4 +40,3 @@
             echo "unable to subscribe please try again later";
         }
     }
-?>

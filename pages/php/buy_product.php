@@ -98,11 +98,11 @@ if ($query->num_rows != 0) {
 
         <div class="row mt-2 rounded">
             <div class="col-md-6 bg-white border " align="center">
-                <img src="<?php echo "../../".$front_pic;?>" width="180" class="mt-3 mb-3 preview">
+                <img src="<?php echo "../../" . $front_pic; ?>" width="180" class="mt-3 mb-3 preview">
                 <br>
-                <img src="<?php echo "../../".$back_pic;?>" width="80" height="164" class="border shadow-sm mb-2 ml-2 thumb-pic">
-                <img src="<?php echo "../../".$left_pic;?>" width="80" height="164" class="border shadow-sm mb-2 ml-2 thumb-pic">
-                <img src="<?php echo "../../".$right_pic;?>" width="80" height="164" class="border shadow-sm mb-2 ml-2 thumb-pic">            
+                <img src="<?php echo "../../" . $back_pic; ?>" width="80" height="164" class="border shadow-sm mb-2 ml-2 thumb-pic">
+                <img src="<?php echo "../../" . $left_pic; ?>" width="80" height="164" class="border shadow-sm mb-2 ml-2 thumb-pic">
+                <img src="<?php echo "../../" . $right_pic; ?>" width="80" height="164" class="border shadow-sm mb-2 ml-2 thumb-pic">
             </div>
             <div class="col-md-6 bg-white p-4" style="border-left: 2px solid #ddd;">
                 <h5 class="p-0 m-0 text-uppercase"><?php echo $title ?></h5>
@@ -135,48 +135,41 @@ if ($query->num_rows != 0) {
                         <button class="btn btn-success pincode-btn">proceed</button>
                     </div>
                 </div>
-                
+
                 <p class="pincode-message mt-2"></p>
 
             </div>
             <div class="col-md-12 bg-white mt-1 p-4">
                 <h4>product review</h4>
                 <?php
-                    $get_data = "SELECT * FROM purchase WHERE product_id = '$id' WHERE rating <> 0";
-                    $response = $db->query($get_data);
-                    if($response)
-                    {
-                        while($data = $response->fetch_assoc())
-                        {
-                            $src = "data:images/png;base64,".base64_encode($data['picture']);
-                            $full_name = $data['fullname'];
-                            $rating = $data['ratings'];
-                            $comment = $data['comment'];
-                            echo "<div class='media mb-4'>";
-                            echo "<img src='".$src."' width='80' height='80' style='border:2px solid green' class='rounded-circle'>";
-                            echo "<div class='media-body ml-4'>";
-                            echo "<p class='p-0 m-0'>".$full_name."</p>";
-                            for($i=0;$i<$rating;$i++)
-                                    {
-                                        echo"<i class='fa fa-star text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
-                                        
-                                    }
-                                    $rest_star = 5-$rating;
-                                    for($i=0;$i<$rest_star;$i++)
-                                    {
-                                        echo"<i class='fa fa-star-0 text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
-                                    }
-                                  echo "<p>".$comment."</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-
+                $get_data = "SELECT * FROM purchase WHERE product_id = '$id' WHERE rating <> 0";
+                $response = $db->query($get_data);
+                if ($response) {
+                    while ($data = $response->fetch_assoc()) {
+                        $src = "data:images/png;base64," . base64_encode($data['picture']);
+                        $full_name = $data['fullname'];
+                        $rating = $data['ratings'];
+                        $comment = $data['comment'];
+                        echo "<div class='media mb-4'>";
+                        echo "<img src='" . $src . "' width='80' height='80' style='border:2px solid green' class='rounded-circle'>";
+                        echo "<div class='media-body ml-4'>";
+                        echo "<p class='p-0 m-0'>" . $full_name . "</p>";
+                        for ($i = 0; $i < $rating; $i++) {
+                            echo "<i class='fa fa-star text-warning star' index='" . $i . "' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
                         }
+                        $rest_star = 5 - $rating;
+                        for ($i = 0; $i < $rest_star; $i++) {
+                            echo "<i class='fa fa-star-0 text-warning star' index='" . $i . "' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                        }
+                        echo "<p>" . $comment . "</p>";
+                        echo "</div>";
+                        echo "</div>";
                     }
+                }
 
                 ?>
             </div>
-            
+
         </div>
 
     </div>

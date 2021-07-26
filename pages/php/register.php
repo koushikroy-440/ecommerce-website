@@ -62,5 +62,3 @@
             echo "unable to create table";
         }
     }
-
-?>

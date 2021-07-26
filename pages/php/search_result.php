@@ -402,12 +402,12 @@ $keyword = $_GET['search'];
                                 $response = $db->query($get_data);
                                 if ($response) {
                                     $insert_data = "INSERT INTO failed_keyword(keyword) VALUES('$keyword')";
-                                        $response = $db->query($insert_data);
-                                        if ($response) {
-                                            echo "product not found!";
-                                        } else {
-                                            echo "something went wrong please tryagain later";
-                                        }
+                                    $response = $db->query($insert_data);
+                                    if ($response) {
+                                        echo "product not found!";
+                                    } else {
+                                        echo "something went wrong please tryagain later";
+                                    }
                                 } else {
                                     $create_table = "CREATE TABLE failed_keyword(
                                         id INT(11) NOT NULL AUTO_INCREMENT,

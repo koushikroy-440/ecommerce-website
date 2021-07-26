@@ -43,5 +43,3 @@
     else{
         echo "can't find table";
     }
-
-?>

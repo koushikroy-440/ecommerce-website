@@ -4,6 +4,7 @@ $cat_name = $_GET["cat_name"];
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>Title</title>
     <!-- Required meta tags -->
@@ -19,9 +20,9 @@ $cat_name = $_GET["cat_name"];
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="../js/index.js"></script>
     <style type="text/css">
-    *:focus{
-        box-shadow:none !important;
-    }
+        *:focus {
+            box-shadow: none !important;
+        }
     </style>
 </head>
 
@@ -31,28 +32,27 @@ $cat_name = $_GET["cat_name"];
     include_once("../../asset/nav.php");
     ?>
     <div class="container-fluid" style="margin-top: 100px; margin-bottom:40px;">
-    <a href="#" class="text-capitalize">
-    <?php
-    echo $cat_name;
-    ?>
-    </a>
+        <a href="#" class="text-capitalize">
+            <?php
+            echo $cat_name;
+            ?>
+        </a>
         <div class="row mt-2">
             <div class="col-md-3">
                 <div class="bg-white w-100 p-4 border">
                     <h5>Filter By Brand</h5>
                     <div class="btn-group-vertical mb-3">
-                    <?php
+                        <?php
                         $get_data = "SELECT * FROM brands WHERE category_name='$cat_name'";
                         $response = $db->query($get_data);
-                        if($response){
-                            echo"<button class='btn px-0 text-capitalize text-left category-btn' category_name=".$cat_name." brand_name='all'>ALL</button>";
-                            while($data = $response->fetch_assoc()){
-                                echo"<button class='btn px-0 text-capitalize text-left category-btn' category_name=".$cat_name." brand_name=".$data['brands'].">".$data['brands']."</button>";
+                        if ($response) {
+                            echo "<button class='btn px-0 text-capitalize text-left category-btn' category_name=" . $cat_name . " brand_name='all'>ALL</button>";
+                            while ($data = $response->fetch_assoc()) {
+                                echo "<button class='btn px-0 text-capitalize text-left category-btn' category_name=" . $cat_name . " brand_name=" . $data['brands'] . ">" . $data['brands'] . "</button>";
                             }
-
                         }
-                            
-                    ?>
+
+                        ?>
                     </div>
                     <h5>Filter By Price</h5>
                     <div class="btn-group bg-light border shadow-sm mb-3">
@@ -62,7 +62,7 @@ $cat_name = $_GET["cat_name"];
                         <button class="btn">
                             <input type="number" placeholder="maximum price" class="form-control max-price">
                         </button>
-                        <button class="btn price-filter-btn" cat-name = "<?php echo $cat_name?>">Get products</button>
+                        <button class="btn price-filter-btn" cat-name="<?php echo $cat_name ?>">Get products</button>
                     </div>
                     <h4>Sort by</h4>
                     <select class="form-control sort-by">

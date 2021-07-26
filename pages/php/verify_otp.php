@@ -20,5 +20,3 @@
     else{
         echo "wrong otp";
     }
-
-?>

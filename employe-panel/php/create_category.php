@@ -15,7 +15,6 @@ if ($db->query($select_category_table)) {
         } else {
 
             $message = "Failed to store data in table";
-
         }
     }
     echo $message;

@@ -140,5 +140,3 @@
                         echo "unable to store data header_showcase table";
                 }
         }
-
-?>

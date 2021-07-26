@@ -1,31 +1,28 @@
-
 <?php
-    $file = $_FILES['photo'];
-    $location = $file['tmp_name'];
-    $image = "data:image/png;base64,".base64_encode(file_get_contents($location));
+$file = $_FILES['photo'];
+$location = $file['tmp_name'];
+$image = "data:image/png;base64," . base64_encode(file_get_contents($location));
 
-    $data = json_decode($_POST['data']);
-    $text = $data[0];
-    $h_align = $data[1];
-    $v_align = $data[2];
-    $text_align = "";
-    if($h_align == "center")
-    {
-        $text_align = "text-center";
-    }
-    else if($h_align == "flex-start"){
-        $text_align = "text-left";
-    }
-    else if($h_align == "flex-end"){
-        $text_align = "text-left";
-    }
+$data = json_decode($_POST['data']);
+$text = $data[0];
+$h_align = $data[1];
+$v_align = $data[2];
+$text_align = "";
+if ($h_align == "center") {
+    $text_align = "text-center";
+} else if ($h_align == "flex-start") {
+    $text_align = "text-left";
+} else if ($h_align == "flex-end") {
+    $text_align = "text-left";
+}
 
 
 
 ?>
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <title>Title</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -33,29 +30,31 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-     <!-- Optional JavaScript -->
+    <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </head>
-  <body>
-      <div class="container p-0">
+</head>
+
+<body>
+    <div class="container p-0">
         <div class="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="<?php echo $image; ?>" class="w-100">
                     <div class="carousel-caption <?php echo $text_align;  ?> h-100 d-flex" style="justify-content:<?php echo $h_align; ?>;align_items:<?php $v_align; ?>">
-                    <div>
-                        <?php
+                        <div>
+                            <?php
                             echo $text;
-                        ?>
-                    </div>
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-      </div>
-   
-  </body>
+    </div>
+
+</body>
+
 </html>

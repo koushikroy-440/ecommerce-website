@@ -31,53 +31,51 @@ $username = base64_decode($_COOKIE['_au_']);
     include_once("../../asset/nav.php");
     ?>
     <div class="container" style="margin-top: 80px; margin-bottom:40px;">
-      <div class="row">
-          <div class="col-md-8">
-              <ul class="nav nav-tabs">
-                  <li class="nav-item">
-                      <a href="#personal" class="nav-link active" data-toggle="tab">
-                          PERSONAL
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a href="#privacy" class="nav-link" data-toggle="tab">
-                          PRIVACY
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a href="#purchase" class="nav-link" data-toggle="tab">
-                          PURCHASE HISTORY
-                      </a>
-                  </li>
-              </ul>
-              <div class="tab-content">
-                  <div class="tab-pane active" id="personal">
+        <div class="row">
+            <div class="col-md-8">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="#personal" class="nav-link active" data-toggle="tab">
+                            PERSONAL
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#privacy" class="nav-link" data-toggle="tab">
+                            PRIVACY
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#purchase" class="nav-link" data-toggle="tab">
+                            PURCHASE HISTORY
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="personal">
                         <?php
-                            $first_name = "";
-                            $last_name = "";
-                            $email = "";
-                            $mobile = "";
-                            $state = "";
-                            $pin_code = "";
-                            $country = "";
-                            $address = "";
+                        $first_name = "";
+                        $last_name = "";
+                        $email = "";
+                        $mobile = "";
+                        $state = "";
+                        $pin_code = "";
+                        $country = "";
+                        $address = "";
 
-                            $get_data = "SELECT * FROM users WHERE  email = '$username'";
-                            $response = $db->query($get_data);
-                            if($response)
-                            {
-                                $data = $response->fetch_assoc();
-                                
-                                $first_name = $data['firstname'];
-                                $last_name = $data['lastname'];
-                                $email = $data['email'];
-                                $mobile = $data['mobile'];
-                                $state = $data['state'];
-                                $pin_code = $data['pincode'];
-                                $country = $data['country'];
-                                $address = $data['address'];
+                        $get_data = "SELECT * FROM users WHERE  email = '$username'";
+                        $response = $db->query($get_data);
+                        if ($response) {
+                            $data = $response->fetch_assoc();
 
-                            }
+                            $first_name = $data['firstname'];
+                            $last_name = $data['lastname'];
+                            $email = $data['email'];
+                            $mobile = $data['mobile'];
+                            $state = $data['state'];
+                            $pin_code = $data['pincode'];
+                            $country = $data['country'];
+                            $address = $data['address'];
+                        }
 
                         ?>
                         <div class="jumbotron py-3 my-4 bg-white shadow-sm border-top border-bottom" style="border-left: 5px solid blue">
@@ -119,110 +117,98 @@ $username = base64_decode($_COOKIE['_au_']);
                                 <button type="submit" class="btn btn-primary">UPDATE</button>
                             </form>
                         </div>
-                  </div>
-                  <div class="tab-pane fade" id="privacy">
-                  <div class="jumbotron py-3 my-4 bg-white shadow-sm border-top border-bottom" style="border-left: 5px solid blue">
-                      <form class="privacy-form">
-                          <div class="form-group">
-                              <span for="old-password">OLD PASSWORD</span>
-                              <input type="password" id="old-password" name="old-password" class="form-control" required>
-                          </div>
-                          <div class="form-group">
-                              <span for="new-password">NEW PASSWORD</span>
-                              <input type="password" id="new-password" name="new-password" class="form-control" required>
-                          </div>
-                          <div class="form-group">
-                              <span for="re-password">RE-ENTER PASSWORD</span>
-                              <input type="password" id="re-password" name="re-password" class="form-control" required>
-                          </div>
-                          <button type="submit" class="btn btn-primary change_password_btn">CHANGE PASSWORD</button>
-                      </form>
-                  </div>
-                  </div>
-                  <div class="tab-pane fade" id="purchase">
-                      <?php
-                      $get_data = "SELECT * FROM purchase WHERE email = '$username'";
-                      $response = $db->query($get_data);
-                      if($response->num_rows != 0)
-                      {
-                        while($data = $response->fetch_assoc())
-                        {
-                            $title = $data['title'];
-                            $product_id = $data['product_id'];
-                            $price = $data['price'];
-                            $qnt = $data['quantity'];
-                            $payment_mode = $data['payment_mode'];
-                            $status = $data['status'];
-                            $date = date_create($data['purchase_date']);
-                            $purchase_date = date_format($date,'d-m-y');
-                            $photo = "";
-                            $rating = $data['ratings'];
-                            $comment = $data['comment'];
-                            //get photo
-                            $get_data = "SELECT * FROM products WHERE id='$product_id'";
-                            $response = $db->query($get_data);
-                            if($response)
-                            {
-                                $data = $response->fetch_assoc();
-                                $photo = $data['thumb_pic'];
-                            }
-                            echo "<div class='media border rounded bg-white shadow-sm my-4 p-4'>";
-                            echo "<img class='mr-3' src='../../".$photo."' width='80px'>";
-                            echo "<div class='media-body'>";
-                            echo "<h4 class='text-uppercase'>".$title."</h4>";
-                            echo "<p class='p-0 m-0'><i class='fa fa-rupee'></i> ".$price."</p>";
-                            echo "<p class='p-0 m-0'>Quantity : ".$qnt."</p>";
-                            echo "<p class='p-0 m-0'>payment mode :".$payment_mode."</p>";
-                            echo "<p class='p-0 m-0'>Status : ".$status."</p>";
-                            echo "<p class='p-0 m-0'>Purchase date : ".$purchase_date."</p>";
-                            if($status == "delivered")
-                            {
-                                if($rating == 0)
-                                {
+                    </div>
+                    <div class="tab-pane fade" id="privacy">
+                        <div class="jumbotron py-3 my-4 bg-white shadow-sm border-top border-bottom" style="border-left: 5px solid blue">
+                            <form class="privacy-form">
+                                <div class="form-group">
+                                    <span for="old-password">OLD PASSWORD</span>
+                                    <input type="password" id="old-password" name="old-password" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <span for="new-password">NEW PASSWORD</span>
+                                    <input type="password" id="new-password" name="new-password" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <span for="re-password">RE-ENTER PASSWORD</span>
+                                    <input type="password" id="re-password" name="re-password" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary change_password_btn">CHANGE PASSWORD</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="purchase">
+                        <?php
+                        $get_data = "SELECT * FROM purchase WHERE email = '$username'";
+                        $response = $db->query($get_data);
+                        if ($response->num_rows != 0) {
+                            while ($data = $response->fetch_assoc()) {
+                                $title = $data['title'];
+                                $product_id = $data['product_id'];
+                                $price = $data['price'];
+                                $qnt = $data['quantity'];
+                                $payment_mode = $data['payment_mode'];
+                                $status = $data['status'];
+                                $date = date_create($data['purchase_date']);
+                                $purchase_date = date_format($date, 'd-m-y');
+                                $photo = "";
+                                $rating = $data['ratings'];
+                                $comment = $data['comment'];
+                                //get photo
+                                $get_data = "SELECT * FROM products WHERE id='$product_id'";
+                                $response = $db->query($get_data);
+                                if ($response) {
+                                    $data = $response->fetch_assoc();
+                                    $photo = $data['thumb_pic'];
+                                }
+                                echo "<div class='media border rounded bg-white shadow-sm my-4 p-4'>";
+                                echo "<img class='mr-3' src='../../" . $photo . "' width='80px'>";
+                                echo "<div class='media-body'>";
+                                echo "<h4 class='text-uppercase'>" . $title . "</h4>";
+                                echo "<p class='p-0 m-0'><i class='fa fa-rupee'></i> " . $price . "</p>";
+                                echo "<p class='p-0 m-0'>Quantity : " . $qnt . "</p>";
+                                echo "<p class='p-0 m-0'>payment mode :" . $payment_mode . "</p>";
+                                echo "<p class='p-0 m-0'>Status : " . $status . "</p>";
+                                echo "<p class='p-0 m-0'>Purchase date : " . $purchase_date . "</p>";
+                                if ($status == "delivered") {
+                                    if ($rating == 0) {
                                         echo "<h4 class='mt-2 comment-header'>PLEASE RATE THE PRODUCT</h4>";
-                                    for($i=0;$i<5;$i++){
-                                        echo"<i class='fa fa-star-o text-warning star' index='".$i."' style='font-size:25px;margin-right:5px'></i>";
-                                    }
-                                    echo "<div class='comment-box'>
+                                        for ($i = 0; $i < 5; $i++) {
+                                            echo "<i class='fa fa-star-o text-warning star' index='" . $i . "' style='font-size:25px;margin-right:5px'></i>";
+                                        }
+                                        echo "<div class='comment-box'>
                                     <label for='comment'>Comment</label>
                                     <textarea id='comment' name='comment' class='form-control ' maxlength='100'></textarea>
                                     </div>";
-                                    echo "<div class='picture-box'>
+                                        echo "<div class='picture-box'>
                                     <label for='picture'>Picture</label>
                                     <input id='picture' name='picture' type='file' accept='image/*' class='form-control image-box'>
                                     </div>";
-                                    echo "<p class='comment-info'></p>";
-                                    echo "<br><button class=' btn btn-primary star-btn d-none' product-id='".$product_id."'>POST</button>";
-
-                                }  
-                                else{
-                                    echo "<h4 class='mt-2'>YOUR RATING</h4>";
-                                    for($i=0;$i<$rating;$i++)
-                                    {
-                                        echo"<i class='fa fa-star text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
-                                        
+                                        echo "<p class='comment-info'></p>";
+                                        echo "<br><button class=' btn btn-primary star-btn d-none' product-id='" . $product_id . "'>POST</button>";
+                                    } else {
+                                        echo "<h4 class='mt-2'>YOUR RATING</h4>";
+                                        for ($i = 0; $i < $rating; $i++) {
+                                            echo "<i class='fa fa-star text-warning star' index='" . $i . "' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                                        }
+                                        $rest_star = 5 - $rating;
+                                        for ($i = 0; $i < $rest_star; $i++) {
+                                            echo "<i class='fa fa-star-0 text-warning star' index='" . $i . "' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
+                                        }
+                                        echo "<p>" . $comment . "</p>";
                                     }
-                                    $rest_star = 5-$rating;
-                                    for($i=0;$i<$rest_star;$i++)
-                                    {
-                                        echo"<i class='fa fa-star-0 text-warning star' index='".$i."' style='font-size:25px;margin-right:5px;pointer-events:none'></i>";
-                                    }
-                                  echo "<p>".$comment."</p>";
-
-                                } 
+                                }
+                                echo "</div>";
+                                echo "</div>";
                             }
-                            echo "</div>";
-                            echo "</div>";
+                        } else {
+                            echo "no purchase";
                         }
-                      }
-                      else{
-                          echo"no purchase";
-                      }
-                      ?>
-                  </div>
-              </div>
-          </div>
-      </div>
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <?php
     include_once("../../asset/footer.php");

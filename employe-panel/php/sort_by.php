@@ -98,7 +98,3 @@
             echo "order now found";
         }
     }
-
-
-
-?>

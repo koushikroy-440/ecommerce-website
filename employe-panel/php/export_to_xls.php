@@ -22,10 +22,8 @@ echo '<table class="w-100 purchase-table text-center border table table-bordered
 </tr>';
 $product = "SELECT * FROM purchase";
 $response = $db->query($product);
-if($response)
-{
-  while($data = $response->fetch_assoc())
-  {
+if ($response) {
+  while ($data = $response->fetch_assoc()) {
     echo "<tr>";
     echo "<td class='s-no'>";
     echo "$data[id]";
@@ -66,7 +64,7 @@ if($response)
     echo "<td>";
     echo "$data[purchase_date]";
     echo "</td>";
-    
+
 
     echo "<td>";
     echo "$data[fullname]";
@@ -98,4 +96,3 @@ if($response)
 }
 echo "</tr>";
 echo '</table>';
-?>
