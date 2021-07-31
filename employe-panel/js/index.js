@@ -79,6 +79,7 @@ function dynamic_request(request_link) {
       }
       //====================create product =================
       $(".create-product-form").on("submit", function (e) {
+        e.preventDefault();
         var option = $(".brands-name option");
         var i;
         var c_name;
@@ -89,7 +90,6 @@ function dynamic_request(request_link) {
         }
         // console.log(c_name);
         // return false;
-        e.preventDefault();
         if ($(".brands-name").val() != "Choose brands") {
           $.ajax({
             type: "POST",

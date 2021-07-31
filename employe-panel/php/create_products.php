@@ -9,16 +9,16 @@ $product_description = $_POST['product-description'];
 
 $brands = $_POST['brands'];
 $message = "";
-$date = date("Y-m-d");
+$date = date('Y-m-d');
+$price = $_POST['price'];
+
+$quantity = $_POST['quantity'];
 //get category name
 $get_cat_name = "SELECT category_name FROM brands WHERE brands = '$brands'";
 $response = $db->query($get_cat_name);
 if ($response) {
     $data = $response->fetch_assoc();
-}
-$price = $_POST['price'];
-
-$quantity = $_POST['quantity'];
+} 
 
 $get_data = "SELECT * FROM products";
 
@@ -63,6 +63,7 @@ if ($response) {
             }
             echo $message;
         }
+        // echo"works";
     } else {
         echo "unable to store data product table";
     }

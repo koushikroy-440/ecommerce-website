@@ -89,6 +89,7 @@ require_once("common-files/databases/database.php");
               <button class="btn btn-light verify-btn" type="button">verify</button>
               <button class="btn btn-light resend-btn" type="button">Resend otp</button>
             </div>
+            <p>for verify 123456 . sms sender not working</p>
           </div>
 
         </form>

@@ -116,28 +116,32 @@ function buy_now() {
 buy_now();
 
 //purchase product
-$(document).ready(function () {
-    $(".purchase-btn").click(function () {
-        var pay_mode = $("input[name = 'pay-mode']:checked").val();
-        if (pay_mode) {
-            var id = $(this).attr("product-id");
-            var price = $(this).attr("product-price");
-            var brand = $(this).attr("product-brand");
-            var title = $(this).attr("product-title");
-            var qnt = $(".quantity").val();
-            if (pay_mode == "online") {
-                window.location = "../../pay/pay.php?id=" + id + "&price=" + price + "&brand=" + brand + "&title=" + title + "&qnt=" + qnt;
+
+    $(document).ready(function () {
+        $(".purchase-btn").click(function () {
+            var pay_mode = $("input[name = 'pay-mode']:checked").val();
+            if (pay_mode) {
+                var id = $(this).attr("product-id");
+                var price = $(this).attr("product-price");
+                var brand = $(this).attr("product-brand");
+                var title = $(this).attr("product-title");
+                var qnt = $(".quantity").val();
+                if (pay_mode == "online") {
+                    window.location = "../../pay/pay.php?id=" + id + "&price=" + price + "&brand=" + brand + "&title=" + title + "&qnt=" + qnt;
+                    // alert();
+                }
+                else {
+                    window.location = "../../pay/purchase.php?id=" + id + "&price=" + price + "&brand=" + brand + "&title=" + title + "&quantity=" + qnt + "&mode=cod";
+                }
                 // alert();
             }
             else {
-                window.location = "../../pay/purchase.php?id=" + id + "&price=" + price + "&brand=" + brand + "&title=" + title + "&quantity=" + qnt + "&mode=cod";
+                alert("please chose a payment option");
             }
-        }
-        else {
-            alert("please chose a payment option");
-        }
+        });
     });
-});
+
+
 //check pinCode
 $(document).ready(function () {
     $(".pincode-btn").click(function () {
@@ -241,7 +245,7 @@ $(document).ready(function () {
                             });
                             //buy btn
                             var buy_btn = document.createElement("btn");
-                            buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn";
+                            buy_btn.className = "btn btn-primary mt-3 mr-3 purchase-btn ";
                             buy_btn.innerHTML = "BUY NOW";
                             $(buy_btn).attr("product-title", all_data[i].title);
                             $(buy_btn).attr("product-id", all_data[i].id);
@@ -249,8 +253,8 @@ $(document).ready(function () {
                             $(buy_btn).attr("product-pic", all_data[i].thumb_pic);
                             $(buy_btn).attr("product-brand", all_data[i].brands);
                             $(buy_btn).on("click", function () {
-                                buy_now();
-
+                                
+                                purchase();
                             });
 
                             $(div).append(img);
@@ -270,11 +274,21 @@ $(document).ready(function () {
         });
     });
 });
-
+//purchase now
+function purchase(){
+    $(document).ready(function () {
+        $(".purchase-btn").each(function () {
+            $(this).click(function () {
+                var product_id = $(this).attr("product-id");
+                window.location = "http://localhost/ecommerce-project/pages/php/buy_product.php?product-id=" + product_id;
+            });
+        });
+    });
+}
 //default btn
 $(document).ready(function () {
     var category_btn = $(".category-btn");
-    category_btn[0].click();
+    // category_btn[0].click();
 });
 
 //filter by price

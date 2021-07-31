@@ -33,6 +33,9 @@ if ($response) {
     $left_pic = $data['left_pic'];
     $right_pic = $data['right_pic'];
 }
+else{
+    header("Location:http://localhost/ecommerce-project/index.php?");
+}
 $cart_btn = "";
 $check_cart = "SELECT * FROM cart WHERE product_id = '$id' AND username = '$username'";
 $query = $db->query($check_cart);

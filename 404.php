@@ -24,7 +24,7 @@ require_once "common-files/databases/database.php";
 <body class="bg-white">
 
   <?php
-//   include_once("asset/nav.php");
+  include_once("asset/nav.php");
   ?>
   <div class="container-fluid">
     <img src="common-files/images/404.jfif" alt="404" style="width: 100%;height:100%;">
